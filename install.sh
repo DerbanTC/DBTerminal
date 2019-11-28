@@ -1,4 +1,7 @@
 #!/bin/bash
+#Works for Debian 9.4
+#chmod +x ./install.sh
+#You have to confirm with Yes/No
 
 echo Install Script started...
 
