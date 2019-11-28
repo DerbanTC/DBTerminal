@@ -17,6 +17,8 @@ apt-get install htop
 
 apt-get install default-jdk
 
+apt-get install git
+
 apt-get update
 
 echo Install Script finished
