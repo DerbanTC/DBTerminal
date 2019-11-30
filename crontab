@@ -1,2 +1,0 @@
-# to edit the crontab usually type "crontab -e" and add the following lines
-@reboot sleep 2 && /home/bashscripts/init.sh
