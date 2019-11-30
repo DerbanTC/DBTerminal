@@ -21,7 +21,7 @@ apt-get install git
 
 apt-get update
 
-Install packages finished! Add cron-job for the init.sh @reboot...
+echo Install packages finished! Add cron-job for the init.sh @reboot...
 
 crontab -l | { cat; echo "@reboot sleep 2 && /home/bashscripts/init.sh"; } | crontab -
 
