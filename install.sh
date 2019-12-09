@@ -9,6 +9,10 @@ apt-get update
 
 apt install locales-all
 
+apt-get install curl
+
+apt-get install jq
+
 apt-get install screen
 
 apt-get install tmux
