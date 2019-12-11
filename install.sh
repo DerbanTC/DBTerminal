@@ -28,6 +28,6 @@ apt-get update
 
 echo "Install packages finished! Add cron-job for the rebound.sh @reboot..."
 
-crontab -l | { cat; echo "@reboot sleep 2 && screen -dmS "ReboundLoop" bash -c /home/bashscripts/rebound.sh"; } | crontab -
+crontab -l | { cat; echo "@reboot sleep 2 && screen -dmS "ReboundLoop" bash -c /home/bashscripts/reboundloop.sh"; } | crontab -
 
 echo Cronjob installed. Script finished!
