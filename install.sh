@@ -19,7 +19,7 @@ apt-get install tmux
 
 apt-get install htop
 
-apt-get install default-jdk
+apt-get install openjdk-7-jre-headless
 
 apt-get install git
 
