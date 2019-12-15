@@ -7,23 +7,14 @@
 echo Install Script started...
 
 apt-get update
-
 apt install locales-all
-
 apt-get install curl
-
 apt-get install jq
-
 apt-get install screen
-
 apt-get install tmux
-
 apt-get install htop
-
-apt-get install openjdk-7-jre-headless
-
+apt-get install openjdk-7-jre
 apt-get install git
-
 apt-get update
 
 echo "Install packages finished! Add cron-job for the rebound.sh @reboot..."
