@@ -50,6 +50,17 @@ installTMUXconf() {
 	cp tmuxtmpfile ~/.tmux.conf && rm tmuxtmpfile
 }
 
+createDBTDirectory() {
+	actDir=${PWD##*/}
+	if ! [[ $actDir == DBTerminal ]];then
+		mkdir DBTerminal
+		DBTDir="${PWD}/DBTerminal/"
+		echo -e "[DONE]: -> Neuer Ordner <$DBTDir> erstellt..."
+	else
+		DBTDir="${PWD}/"
+	fi
+}
+
 echo Install Script started...
 
 apt-get update
@@ -61,6 +72,8 @@ setLocalesDE
 fixBashrc
 
 installTMUXconf
+
+createDBTDirectory
 
 echo "Install packages finished!"
 
