@@ -1,8 +1,8 @@
 #!/bin/bash
-#Works for Debian 9.4
-#wget -P /home/bashscripts/ https://raw.githubusercontent.com/DerbanTW/bash/master/install.sh && chmod +x /home/bashscripts/install.sh
-#./install.sh
-#You have to confirm with Yes/No
+# Works for Debian 9.4
+# wget -P /YOUR_DIRECTORY/DBTerminal/ https://raw.githubusercontent.com/DerbanTW/DBTerminal/master/install.sh && chmod +x /YOUR_DIRECTORY/DBTerminal/install.sh
+# ./install.sh
+# Actually you have to confirm with Yes/No
 
 echo Install Script started...
 
