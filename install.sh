@@ -18,6 +18,6 @@ apt-get install openjdk-7-jre
 apt-get install git
 apt-get update
 
-echo "Install packages finished! Add cron-job for the rebound.sh @reboot..."
+echo "Install packages finished!"
 
 echo Cronjob installed. Script finished!
