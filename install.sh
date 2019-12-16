@@ -18,11 +18,18 @@ doInstallPackages() {
 	done
 }
 
+setLocalesDE() {
+	apt-get clean && apt-get -y update && apt-get install -y locales && locale-gen de_DE.UTF-8
+	echo -e "[DONE]: -> Lokale Sprache auf Deutsch gesetzt!"
+}
+
 echo Install Script started...
 
 apt-get update
 doInstallPackages
 apt-get update
+
+setLocalesDE
 
 echo "Install packages finished!"
 
