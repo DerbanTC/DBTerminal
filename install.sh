@@ -3,6 +3,7 @@
 # wget -P /YOUR_DIRECTORY/DBTerminal/ https://raw.githubusercontent.com/DerbanTW/DBTerminal/master/install.sh && chmod +x /YOUR_DIRECTORY/DBTerminal/install.sh
 # ./install.sh
 # Actually you have to confirm with Yes/No
+cd $(dirname "$(readlink -fn "$0")")
 
 echo Install Script started...
 
@@ -18,7 +19,5 @@ apt-get install git
 apt-get update
 
 echo "Install packages finished! Add cron-job for the rebound.sh @reboot..."
-
-crontab -l | { cat; echo "@reboot sleep 2 && screen -dmS "ReboundLoop" bash -c /home/bashscripts/reboundloop.sh"; } | crontab -
 
 echo Cronjob installed. Script finished!
