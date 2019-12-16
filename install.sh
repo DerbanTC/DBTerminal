@@ -45,6 +45,11 @@ fixBashrc() {
 	fi
 }
 
+installTMUXconf() {
+	wget https://raw.githubusercontent.com/DerbanTW/bash/master/tmux.conf -O tmuxtmpfile
+	cp tmuxtmpfile ~/.tmux.conf && rm tmuxtmpfile
+}
+
 echo Install Script started...
 
 apt-get update
@@ -54,6 +59,8 @@ apt-get update
 setLocalesDE
 
 fixBashrc
+
+installTMUXconf
 
 echo "Install packages finished!"
 
