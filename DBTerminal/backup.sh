@@ -3,7 +3,7 @@ SelfPath="$(dirname "$(readlink -fn "$0")")/"
 cd $SelfPath
 source ./stdvariables.sh
 
-DailyBackupMax=1
+DailyBackupMax=30
 WeeklyDay=4
 MonthlyDay=1
 
@@ -168,3 +168,4 @@ for varMCDirectory in $(ls -d $mcDir*/);do
 		fi
 	fi
 done
+
