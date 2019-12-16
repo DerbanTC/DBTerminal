@@ -63,6 +63,27 @@ createDBTDirectory() {
 	fi
 }
 
+downloadDBTScripts() {
+	if [[ -z $DBTDir ]];then
+		echo -e "[Error]: -> [ERR_instsh_001] please report on: \n>> https://github.com/DerbanTW/DBTerminal/issues"
+		exit 1
+	fi
+	cd $DBTDir
+	DBTScripts=functions.sh,mcfunctions.sh,cmdfunctions.sh,TerminalCMD.sh,reboundloop.sh,backup.sh
+	gitUrl=https://raw.githubusercontent.com/DerbanTW/DBTerminal/master/DBTerminal/
+	IFS=, read -a DBTScriptsArray <<< "$DBTScripts"
+	for varScript in "${DBTScriptsArray[@]}";do
+		if [[ -f $varScript ]];then
+			echo -e "[INFO]: -> Datei <$varScript> bereits vorhanden..."
+		else
+			echo -e "${yellow}>> Starte download von [$varScript]...${norm}"
+			varUrl=$gitUrl$varScript
+			wget $varUrl -qO $varScript
+			chmod +x $varScript
+		fi
+	done
+}
+
 echo Install Script started...
 
 apt-get update
@@ -76,6 +97,7 @@ fixBashrc
 installTMUXconf
 
 createDBTDirectory
+downloadDBTScripts
 
 echo "Install packages finished!"
 
