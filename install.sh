@@ -84,6 +84,23 @@ downloadDBTScripts() {
 	done
 }
 
+downloadSTDVariables() {
+	if [[ -z $DBTDir ]];then
+		echo -e "[Error]: -> [ERR_instsh_001] please report on: \n>> https://github.com/DerbanTW/DBTerminal/issues"
+		exit 1
+	fi
+	cd $DBTDir
+	DBTvarFile=stdvariables.sh
+	if ! [[ -f $DBTvarFile ]];then
+		echo -e "${yellow}>> Starte download von [$DBTvarFile]...${norm}"
+		varUrl=$gitUrl$DBTvarFile
+		wget $varUrl -qO $DBTvarFile
+		chmod +x $DBTvarFile
+	else
+		echo -e "Script [$DBTvarFile] bereits vorhanden..."
+	fi
+}
+
 echo Install Script started...
 
 cd $(dirname "$(readlink -fn "$0")")
