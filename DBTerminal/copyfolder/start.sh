@@ -1,4 +1,9 @@
 #!/bin/bash
+
+#################################################
+# start-shell for minecraft server
+################################################
+
 mcServer=${PWD##*/}
 Selfpath=$(dirname "$(readlink -fn "$0")")
 Config=$Selfpath/BackupConfig.txt
