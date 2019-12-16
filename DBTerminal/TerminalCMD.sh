@@ -6,13 +6,13 @@ source ./stdvariables.sh
 Terminal=$(tmux lsw -F '#{window_name}#{window_active}'|sed -n 's|^\(.*\)1$|\1|p')
 
 getFunction() {
-	source ""$SelfPath"functions.sh" $1 $2 $3
+	source "./functions.sh" $1 $2 $3
 }
 getCMDFunction() {
-	source ""$SelfPath"cmdfunctions.sh" $1 $2 $3
+	source "./cmdfunctions.sh" $1 $2 $3
 }
 getMCFunction() {
-	source ""$SelfPath"mcfunctions.sh" $1 $2 $3
+	source "./mcfunctions.sh" $1 $2 $3
 }
 
 for varMCDirectory in $(ls -d $mcDir*/ | cut -f4 -d'/');do
@@ -96,3 +96,4 @@ while true; do
 		;;
 	esac
 done
+
