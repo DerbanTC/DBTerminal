@@ -5,19 +5,24 @@
 # Actually you have to confirm with Yes/No
 cd $(dirname "$(readlink -fn "$0")")
 
+installPackages=ca-certificates,locales-all,curl,screen,tmux,htop,git,openjdk-7-jre,jq
+
+doInstallPackages() {
+	IFS=, read -a listPackages <<< "$installPackages"
+	for varPackage in "${listPackages[@]}";do 
+		isInstalled=$(dpkg-query -W -f='${Status}' $varPackage 2>/dev/null | grep -c "ok installed")
+		if [[ $isInstalled == 0 ]];then
+			echo "[INFO]: -> Starte Installation von  [$varPackage]..."
+			apt-get install $varPackage
+		fi
+	done
+}
+
 echo Install Script started...
 
 apt-get update
-apt install locales-all
-apt-get install curl
-apt-get install jq
-apt-get install screen
-apt-get install tmux
-apt-get install htop
-apt-get install openjdk-7-jre
-apt-get install git
+doInstallPackages
 apt-get update
 
 echo "Install packages finished!"
 
-echo Cronjob installed. Script finished!
