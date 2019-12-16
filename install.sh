@@ -3,7 +3,7 @@
 # wget --no-check-certificate -P /YOUR_DIRECTORY/DBTerminal/ https://raw.githubusercontent.com/DerbanTW/DBTerminal/master/install.sh && chmod +x /YOUR_DIRECTORY/DBTerminal/install.sh
 # ./install.sh
 # Actually you have to confirm with Yes/No
-cd $(dirname "$(readlink -fn "$0")")
+gitUrl=https://raw.githubusercontent.com/DerbanTW/DBTerminal/master/DBTerminal/
 
 installPackages=ca-certificates,locales-all,curl,screen,tmux,htop,git,openjdk-7-jre,jq
 
@@ -86,18 +86,15 @@ downloadDBTScripts() {
 
 echo Install Script started...
 
+cd $(dirname "$(readlink -fn "$0")")
 apt-get update
 doInstallPackages
 apt-get update
-
 setLocalesDE
-
 fixBashrc
-
 installTMUXconf
-
 createDBTDirectory
-downloadDBTScripts
 
+downloadDBTScripts
 echo "Install packages finished!"
 
