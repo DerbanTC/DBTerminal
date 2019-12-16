@@ -1,6 +1,6 @@
 #!/bin/bash
 # Works for Debian 9.4
-# wget -P /YOUR_DIRECTORY/DBTerminal/ https://raw.githubusercontent.com/DerbanTW/DBTerminal/master/install.sh && chmod +x /YOUR_DIRECTORY/DBTerminal/install.sh
+# wget --no-check-certificate -P /YOUR_DIRECTORY/DBTerminal/ https://raw.githubusercontent.com/DerbanTW/DBTerminal/master/install.sh && chmod +x /YOUR_DIRECTORY/DBTerminal/install.sh
 # ./install.sh
 # Actually you have to confirm with Yes/No
 cd $(dirname "$(readlink -fn "$0")")
