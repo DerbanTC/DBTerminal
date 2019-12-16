@@ -52,12 +52,14 @@ installTMUXconf() {
 
 createDBTDirectory() {
 	actDir=${PWD##*/}
-	if ! [[ $actDir == DBTerminal ]];then
-		mkdir DBTerminal
+	if [[ $actDir == DBTerminal ]];then
+		DBTDir="${PWD}/"
+	elif [[ -z $(ls -d */ 2>/dev/null) ]] || ! [[ $(ls -d */ | grep -c DBTerminal/) == 1 ]];then
 		DBTDir="${PWD}/DBTerminal/"
+		mkdir DBTerminal
 		echo -e "[DONE]: -> Neuer Ordner <$DBTDir> erstellt..."
 	else
-		DBTDir="${PWD}/"
+		DBTDir="${PWD}/DBTerminal/"
 	fi
 }
 
