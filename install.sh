@@ -23,6 +23,28 @@ setLocalesDE() {
 	echo -e "[DONE]: -> Lokale Sprache auf Deutsch gesetzt!"
 }
 
+fixBashrc() {
+	fixPath="export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+	bashrc="/root/.bashrc"
+	tmpfile=instTempfile
+	if [[ -f $bashrc ]];then
+		while read -r line || [ -n "$line" ]; do 
+			if [[ $line == $fixPath ]];then
+				echo exportPathFound > instTempfile
+			fi
+		done < $bashrc
+	fi
+
+	if [[ -f $tmpfile ]];then
+		if ! [[ -z $(grep -o 'exportPathFound' $tmpfile) ]];then
+			rm $tmpfile
+		fi
+	else
+		( echo "" ; echo "$fixPath" ; echo "" ) >> $bashrc
+		echo -e "[Done/fixBashrc]: -> Linie [$fixPath] wurde der Datei <$bashrc> hinzugefuegt!"
+	fi
+}
+
 echo Install Script started...
 
 apt-get update
@@ -30,6 +52,8 @@ doInstallPackages
 apt-get update
 
 setLocalesDE
+
+fixBashrc
 
 echo "Install packages finished!"
 
