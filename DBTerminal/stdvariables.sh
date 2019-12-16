@@ -15,10 +15,8 @@ stdMCPort=25552
 ##################################
 # DO NOT EDIT!
 
-SelfPath="$(dirname "$(readlink -fn "$0")")/"
-internalIP=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1')
 mcSrvCheckAPI=https://api.mcsrvstat.us/2/
-StartShellName=loop.sh
+StartShellName=start.sh
 bkupconfName=BackupConfig.txt
 copyDir="$SelfPath"copyfolder/
 
@@ -49,3 +47,4 @@ bblue=$(tput setab 4)
 bmagenta=$(tput setab 5)
 bcyan=$(tput setab 6)
 bwhite=$(tput setab 7)
+
