@@ -69,7 +69,7 @@ downloadDBTScripts() {
 		exit 1
 	fi
 	cd $DBTDir
-	DBTScripts=functions.sh,mcfunctions.sh,cmdfunctions.sh,TerminalCMD.sh,reboundloop.sh,backup.sh
+	DBTScripts=stdvariables.sh,functions.sh,mcfunctions.sh,cmdfunctions.sh,TerminalCMD.sh,reboundloop.sh,backup.sh
 	gitUrl=https://raw.githubusercontent.com/DerbanTW/DBTerminal/master/DBTerminal/
 	IFS=, read -a DBTScriptsArray <<< "$DBTScripts"
 	for varScript in "${DBTScriptsArray[@]}";do
@@ -84,23 +84,6 @@ downloadDBTScripts() {
 	done
 }
 
-downloadSTDVariables() {
-	if [[ -z $DBTDir ]];then
-		echo -e "[Error]: -> [ERR_instsh_001] please report on: \n>> https://github.com/DerbanTW/DBTerminal/issues"
-		exit 1
-	fi
-	cd $DBTDir
-	DBTvarFile=stdvariables.sh
-	if ! [[ -f $DBTvarFile ]];then
-		echo -e "${yellow}>> Starte download von [$DBTvarFile]...${norm}"
-		varUrl=$gitUrl$DBTvarFile
-		wget $varUrl -qO $DBTvarFile
-		chmod +x $DBTvarFile
-	else
-		echo -e "Script [$DBTvarFile] bereits vorhanden..."
-	fi
-}
-
 echo Install Script started...
 
 cd $(dirname "$(readlink -fn "$0")")
@@ -111,7 +94,7 @@ setLocalesDE
 fixBashrc
 installTMUXconf
 createDBTDirectory
-
 downloadDBTScripts
+
 echo "Install packages finished!"
 
