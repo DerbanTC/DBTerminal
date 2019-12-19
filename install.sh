@@ -84,6 +84,21 @@ downloadDBTScripts() {
 	done
 }
 
+createMCDirectory() {
+	stdvarFile=""$DBTDir"stdvariables.sh"
+	if ! [[ -f $stdvarFile ]];then
+		echo -e "[Error]: -> [ERR_instsh_002] please report on: \n>> https://github.com/DerbanTW/DBTerminal/issues"
+		exit 1
+	fi
+	fullmcDir=$(grep -o 'mcDir=[^"]*' $stdvarFile)
+	stdmcDir=${fullmcDir#*=}
+	if ! [[ -d $stdmcDir ]];then
+		mkdir -p ""$stdmcDir"YourServer/"
+		echo -e "[DONE]: -> Neuer Ordner <$stdmcDir> erstellt."
+	fi
+}
+
+
 echo Install Script started...
 
 cd $(dirname "$(readlink -fn "$0")")
@@ -95,6 +110,7 @@ fixBashrc
 installTMUXconf
 createDBTDirectory
 downloadDBTScripts
+createMCDirectory
 
 echo "Install packages finished!"
 
