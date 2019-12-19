@@ -62,7 +62,7 @@ createDBTDirectory() {
 		DBTDir="${PWD}/"
 	elif [[ -z $(ls -d */ 2>/dev/null) ]] || ! [[ $(ls -d */ | grep -c DBTerminal/) == 1 ]];then
 		DBTDir="${PWD}/DBTerminal/"
-		mkdir DBTerminal
+		mkdir DBTerminal/copyfolder/
 		echo -e "[DONE]: -> Neuer Ordner <$DBTDir> erstellt..."
 	else
 		DBTDir="${PWD}/DBTerminal/"
