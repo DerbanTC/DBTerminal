@@ -102,7 +102,7 @@ installCronJob() {
 	CRON_FILE=/var/spool/cron/crontabs/root
 	reboundShell="$(dirname "$(readlink -fn "$0")")/rebound.sh"
 	cronJob="@reboot screen -dmS "ReboundLoop" bash -c ""$DBTDir"reboundloop.sh""
-	cronExist=$(grep -o "$reboundShell" $CRON_FILE 2>/dev/null)
+	cronExist=$(grep -o "$cronJob" $CRON_FILE 2>/dev/null)
 	if [[ -z $cronExist  ]];then
 		crontab -l 2>/dev/null | { cat; echo "$cronJob"; } | crontab -
 		echo -e "[DONE]: -> Crontab bearbeitet. DBTerminal startet nun bei jedem Reboot!"
