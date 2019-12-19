@@ -321,7 +321,9 @@ getMCPort() {
 ServerList() {
 	echo "Server-Liste:"
 	count=0
-	for mcServer in $(ls -d "$mcDir"*/ | cut -f4 -d'/');do
+	countSlashes=$(echo $mcDir | grep -o "/" | wc -l)
+	lastSlash=$(( countSlashes +1 ))
+	for mcServer in $(ls -d "$mcDir"*/ | cut -f$lastSlash -d'/');do
 		getFunction getBackupConfig
 		count=$(( n+1))
 		MCS="MCS_$mcServer"
