@@ -19,8 +19,15 @@ doInstallPackages() {
 }
 
 setLocalesDE() {
-	apt-get clean && apt-get -y update && apt-get install -y locales && locale-gen de_DE.UTF-8
-	echo -e "[DONE]: -> Lokale Sprache auf Deutsch gesetzt!"
+	localesFile=/etc/default/locale
+	germanLang="LANG=de_DE.UTF-8"
+	isGerman=$(cat $localesFile | grep -o $germanLang)
+	if [[ -z $isGerman ]];then
+		apt-get install locales-all
+		locale-gen de_DE.UTF-8
+		update-locale LANG=de_DE.UTF-8
+		echo -e "[DONE]: -> Lokale Sprache auf Deutsch gesetzt!"
+	fi
 }
 
 fixBashrc() {
