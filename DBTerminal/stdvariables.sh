@@ -4,7 +4,7 @@
 backupDir=/home/backup/
 
 #Minecraft-Ordner / Verzeichnis mit allen möglichen MC-Servern
-mcDir=/home/minecraft/
+mcDir=/minecraft/
 
 #Name der Standard-JarDatei
 jarName=minecraft_server.jar
