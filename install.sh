@@ -5,7 +5,7 @@
 # Actually you have to confirm with Yes/No
 gitUrl=https://raw.githubusercontent.com/DerbanTW/DBTerminal/master/DBTerminal/
 
-installPackages=ca-certificates,locales-all,curl,screen,tmux,htop,git,openjdk-7-jre,jq
+installPackages=ca-certificates,locales-all,curl,screen,tmux,htop,git,default-jdk,jq
 
 doInstallPackages() {
 	IFS=, read -a listPackages <<< "$installPackages"
