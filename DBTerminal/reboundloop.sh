@@ -49,7 +49,9 @@ while true; do
 		Terminal
 	fi
 
-	for mcServer in $(ls -d $mcDir*/ | cut -f4 -d'/');do
+	countSlashes=$(echo $mcDir | grep -o "/" | wc -l)
+	lastSlash=$(( countSlashes +1 ))
+	for mcServer in $(ls -d $mcDir*/ | cut -f$lastSlash -d'/');do
 		getFunction checkConditions
 		if [[ $StartIsEnabled == doStart ]];then
 			getFunction startMCScreen
