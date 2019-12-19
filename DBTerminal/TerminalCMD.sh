@@ -15,7 +15,9 @@ getMCFunction() {
 	source "./mcfunctions.sh" $1 $2 $3
 }
 
-for varMCDirectory in $(ls -d $mcDir*/ | cut -f4 -d'/');do
+countSlashes=$(echo $mcDir | grep -o "/" | wc -l)
+lastSlash=$(( countSlashes +1 ))
+for varMCDirectory in $(ls -d $mcDir*/ | cut -f$lastSlash -d'/');do
 	if $(screen -ls | grep -q MCS_$varMCDirectory);then
 		mcServer=$varMCDirectory
 		getFunction detachMCScreen
