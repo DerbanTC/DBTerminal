@@ -123,9 +123,9 @@ installCronJob
 
 # Jeweiliger Ordner-Name
 countSlashes=$(echo $mcDir | grep -o "/" | wc -l)
-varCut=$(( countSlashes +1 ))
+lastSlash=$(( countSlashes +1 ))
 for varMCDirectory in $(ls -d $mcDir*/);do
-	mcServer="$(echo "$varMCDirectory" | cut -d'/' -f $varCut)"
+	mcServer="$(echo "$varMCDirectory" | cut -d'/' -f$lastSlash)"
 # Variabeln
 	getTime
 	getFunction getBackupConfig
