@@ -88,6 +88,17 @@ downloadDBTScripts() {
 			chmod +x $varScript
 		fi
 	done
+#todo: read max ram from system; adjust the start.sh (and move this in an own function)
+	cd $DBTDir/copyfolder/
+	if [[ -f $mcStartShell ]];then
+		echo -e "[INFO]: -> Datei <$mcStartShell> bereits vorhanden..."
+	else
+		echo -e "${yellow}>> Starte download von [$mcStartShell]...${norm}"
+		cd $DBTDir/copyfolder/
+		varUrl=""$gitUrl"copyfolder/$mcStartShell"
+		wget $varUrl -qO $mcStartShell
+	fi
+	cd $DBTDir
 }
 
 createMCDirectory() {
