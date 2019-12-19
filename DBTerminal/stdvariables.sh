@@ -16,6 +16,7 @@ stdMCPort=25552
 # DO NOT EDIT!
 
 mcSrvCheckAPI=https://api.mcsrvstat.us/2/
+internalIP=$(hostname -i)
 StartShellName=start.sh
 bkupconfName=BackupConfig.txt
 copyDir="$SelfPath"copyfolder/
