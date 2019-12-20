@@ -65,13 +65,17 @@ createDBTDirectory() {
 	actDir=${PWD##*/}
 	if [[ $actDir == DBTerminal ]];then
 		DBTDir="${PWD}/"
+		copyfolder=""$DBTDir"copyfolder/"
 	elif [[ -z $(ls -d */ 2>/dev/null) ]] || ! [[ $(ls -d */ | grep -c DBTerminal/) == 1 ]];then
 		DBTDir="${PWD}/DBTerminal/"
-		mkdir DBTerminal/copyfolder/
+		copyfolder=""$DBTDir"copyfolder/"
+		mkdir -p $copyfolder
 		echo -e "[DONE]: -> Neuer Ordner <$DBTDir> erstellt..."
 	else
 		DBTDir="${PWD}/DBTerminal/"
+		copyfolder=""$DBTDir"copyfolder/"
 	fi
+	echo "0000 Copyfolder is [$copyfolder]"
 }
 
 # Download all Scripts in the DBT Directory
@@ -82,6 +86,7 @@ downloadDBTScripts() {
 	fi
 	cd $DBTDir
 	DBTScripts=stdvariables.sh,functions.sh,mcfunctions.sh,cmdfunctions.sh,TerminalCMD.sh,reboundloop.sh,backup.sh
+	mcStartShell=start.sh
 	gitUrl=https://raw.githubusercontent.com/DerbanTW/DBTerminal/master/DBTerminal/
 	IFS=, read -a DBTScriptsArray <<< "$DBTScripts"
 	for varScript in "${DBTScriptsArray[@]}";do
@@ -95,12 +100,15 @@ downloadDBTScripts() {
 		fi
 	done
 #todo: read max ram from system; adjust the start.sh (and move this in an own function)
-	cd $DBTDir/copyfolder/
+	if ! [[ -d $copyfolder ]];then
+		mkdir -p $copyfolder
+	fi
+	cd $copyfolder
 	if [[ -f $mcStartShell ]];then
 		echo -e "[INFO]: -> Datei <$mcStartShell> bereits vorhanden..."
 	else
 		echo -e "${yellow}>> Starte download von [$mcStartShell]...${norm}"
-		cd $DBTDir/copyfolder/
+		cd $copyfolder
 		varUrl=""$gitUrl"copyfolder/$mcStartShell"
 		wget $varUrl -qO $mcStartShell
 	fi
