@@ -2,11 +2,12 @@
 # Works for Debian 9.9 (minimal)
 # wget --no-check-certificate -P /YOUR_DIRECTORY/DBTerminal/ https://raw.githubusercontent.com/DerbanTW/DBTerminal/master/install.sh && chmod +x /YOUR_DIRECTORY/DBTerminal/install.sh
 # ./install.sh
+
+
+# Install packages
 # Actually you have to confirm with Yes/No
-
-installPackages=ca-certificates,locales-all,curl,screen,tmux,htop,git,default-jdk,jq
-
 doInstallPackages() {
+	installPackages=ca-certificates,locales-all,curl,screen,tmux,htop,git,default-jdk,jq
 	IFS=, read -a listPackages <<< "$installPackages"
 	for varPackage in "${listPackages[@]}";do 
 		isInstalled=$(dpkg-query -W -f='${Status}' $varPackage 2>/dev/null | grep -c "ok installed")
@@ -17,6 +18,7 @@ doInstallPackages() {
 	done
 }
 
+# Support for äöü (todo: add entry in stdvariables and use inscript language to don't force other using german als std.).
 setLocalesDE() {
 	localesFile=/etc/default/locale
 	germanLang="LANG=de_DE.UTF-8"
@@ -29,6 +31,7 @@ setLocalesDE() {
 	fi
 }
 
+# Some installations couldn't read the scripts; first solution.
 fixBashrc() {
 	fixPath="export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 	bashrc="/root/.bashrc"
@@ -51,11 +54,13 @@ fixBashrc() {
 	fi
 }
 
+# Add Mouse-Support (on/off with Alt-X/Y) 
 installTMUXconf() {
 	wget https://raw.githubusercontent.com/DerbanTW/bash/master/tmux.conf -O tmuxtmpfile
 	cp tmuxtmpfile ~/.tmux.conf && rm tmuxtmpfile
 }
 
+# Standard Directory for DBT
 createDBTDirectory() {
 	actDir=${PWD##*/}
 	if [[ $actDir == DBTerminal ]];then
@@ -69,6 +74,7 @@ createDBTDirectory() {
 	fi
 }
 
+# Download all Scripts in the DBT Directory
 downloadDBTScripts() {
 	if [[ -z $DBTDir ]];then
 		echo -e "[Error]: -> [ERR_instsh_001] please report on: \n>> https://github.com/DerbanTW/DBTerminal/issues"
@@ -101,6 +107,7 @@ downloadDBTScripts() {
 	cd $DBTDir
 }
 
+# Create Standard Minecraft-Directory (change the entry "mcDir=/path_to_your_folder/" in the stdvariables.sh.
 createMCDirectory() {
 	stdvarFile=""$DBTDir"stdvariables.sh"
 	if ! [[ -f $stdvarFile ]];then
@@ -115,6 +122,7 @@ createMCDirectory() {
 	fi
 }
 
+# Add a cronJob to start the DBTerminal by reboot
 installCronJob() {
 	CRON_FILE=/var/spool/cron/crontabs/root
 	reboundShell="$(dirname "$(readlink -fn "$0")")/rebound.sh"
