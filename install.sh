@@ -51,19 +51,21 @@ doInstallJava() {
 
 # Support for äöü (todo: add entry in stdvariables and use inscript language to don't force other using german als std.).
 setLocalesDE() {
-	localesFile=/etc/default/locale
-	germanLang="LC_ALL=de_DE.UTF-8"
-	isGerman=$(cat $localesFile | grep -o $germanLang)
-	if [[ -z $isGerman ]];then
-		apt-get install locales-all
-		apt-get update
-		apt-get install -y locales
-		locale-gen "LC_ALL=de_DE.UTF-8"
-		update-locale LC_ALL="de_DE.UTF-8"
-		echo -e "[DONE]: -> Lokale Sprache auf Deutsch gesetzt!"
+	if ! [[ -z $IsAptGet ]];then
+		localesFile=/etc/default/locale
+		germanLang="LC_ALL=de_DE.UTF-8"
+		isGerman=$(cat $localesFile | grep -o $germanLang)
+		if ! [[ -z $isGerman ]];then
+			$instCmd install locales-all
+			$instCmd update
+			$instCmd install -y locales
+			locale-gen "LC_ALL=de_DE.UTF-8"
+			update-locale LC_ALL="de_DE.UTF-8"
+		fi
+	else
+		localectl set-locale LANG=de_DE.UTF-8
 	fi
 }
-
 
 # Some installations couldn't read the scripts; first solution.
 fixBashrc() {
