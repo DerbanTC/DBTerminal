@@ -5,7 +5,6 @@
 
 
 # Install packages
-# Actually you have to confirm with Yes/No
 doInstallPackages() {
 	installPackages=ca-certificates,locales-all,curl,screen,tmux,htop,git,default-jdk,jq
 	IFS=, read -a listPackages <<< "$installPackages"
@@ -13,7 +12,7 @@ doInstallPackages() {
 		isInstalled=$(dpkg-query -W -f='${Status}' $varPackage 2>/dev/null | grep -c "ok installed")
 		if [[ $isInstalled == 0 ]];then
 			echo "[INFO]: -> Starte Installation von  [$varPackage]..."
-			apt-get install $varPackage
+			apt-get install -y $varPackage
 		fi
 	done
 }
