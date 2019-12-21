@@ -20,6 +20,7 @@ checkDistro() {
 
 # Install packages
 doInstallPackages() {
+	$instCmd update
 	installPackages=ca-certificates,locales-all,curl,screen,tmux,htop,git,jq
 	IFS=, read -a listPackages <<< "$installPackages"
 	for varPackage in "${listPackages[@]}";do 
