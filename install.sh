@@ -179,7 +179,11 @@ createMCDirectory() {
 
 # Add a cronJob to start the DBTerminal by reboot
 installCronJob() {
-	CRON_FILE=/var/spool/cron/crontabs/root
+	if ! [[ -z $IsAptGet ]];then
+		CRON_FILE=/var/spool/cron/crontabs/root
+	else
+		CRON_FILE=/var/spool/cron/root
+	fi
 	reboundShell="$(dirname "$(readlink -fn "$0")")/rebound.sh"
 	cronJob="@reboot screen -dmS "ReboundLoop" bash -c ""$DBTDir"reboundloop.sh""
 	cronExist=$(grep -o "$cronJob" $CRON_FILE 2>/dev/null)
@@ -188,7 +192,6 @@ installCronJob() {
 		echo -e "[DONE]: -> Crontab bearbeitet. DBTerminal startet nun bei jedem Reboot!"
 	fi
 }
-
 
 echo Install Script started...
 
