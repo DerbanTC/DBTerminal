@@ -117,7 +117,7 @@ createDBTDirectory() {
 # Download all Scripts in the DBT Directory
 downloadDBTScripts() {
 	if [[ -z $DBTDir ]];then
-		echo -e "[Error]: -> [ERR_instsh_003] please report on: \n>> https://github.com/DerbanTW/DBTerminal/issues"
+		echo -e "[Error]: -> [ERR_instsh_003] please report on: \n>> https://github.com/DerbanTC/DBTerminal/issues"
 		exit 1
 	fi
 	cd $DBTDir
