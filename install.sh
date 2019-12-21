@@ -89,7 +89,6 @@ downloadDBTScripts() {
 	fi
 	cd $DBTDir
 	DBTScripts=stdvariables.sh,functions.sh,mcfunctions.sh,cmdfunctions.sh,TerminalCMD.sh,reboundloop.sh,backup.sh
-	mcStartShell=start.sh
 	gitUrl=https://raw.githubusercontent.com/DerbanTW/DBTerminal/master/DBTerminal/
 	IFS=, read -a DBTScriptsArray <<< "$DBTScripts"
 	for varScript in "${DBTScriptsArray[@]}";do
@@ -102,7 +101,10 @@ downloadDBTScripts() {
 			chmod +x $varScript
 		fi
 	done
-#todo: read max ram from system; adjust the start.sh (and move this in an own function)
+}
+
+downloadMCStartShell() {
+	mcStartShell=start.sh
 	if ! [[ -d $copyfolder ]];then
 		mkdir -p $copyfolder
 	fi
@@ -115,6 +117,17 @@ downloadDBTScripts() {
 		varUrl=""$gitUrl"copyfolder/$mcStartShell"
 		wget $varUrl -qO $mcStartShell
 	fi
+	totalKB=$(free -m | awk '/^Mem:/{print $2}')
+	totalGB=$(( totalKB / 1024 ))
+	if [[ $totalGB -lt 9 ]];then
+		mcMemory=$(( totalGB - 1 ))
+	else
+		mcMemory=$(( totalGB - 2 ))
+	fi
+	javaArg="java -Xms"$mcMemory"G -Xmx"$mcMemory"G -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=40 -XX:G1MaxNewSizePercent=60 -XX:G1MixedGCLiveThresholdPercent=35 -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -Dusing.aikars.flags=mcflags.emc.gs -jar minecraft_server.jar"
+	javaArgLine=$(grep -o 'java[^"]*' $mcStartShell)
+	sed -i "s/$javaArgLine/$javaArg/g" $mcStartShell
+	echo -e "[INFO]: -> Minecraft-Server starten mit [$mcMemory/$totalGB] GB Ram ("$copyfolder"start.sh)"
 	cd $DBTDir
 }
 
@@ -157,6 +170,7 @@ fixBashrc
 installTMUXconf
 createDBTDirectory
 downloadDBTScripts
+downloadMCStartShell
 createMCDirectory
 installCronJob
 
