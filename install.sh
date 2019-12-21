@@ -4,9 +4,23 @@
 # ./install.sh
 
 
+# apt-get vs dnf
+checkDistro() {
+	IsAptGet=$(apt-get --help 2>/dev/null)
+	IsDNF=$(dnf --help 2>/dev/null)
+	if ! [[ -z $IsAptGet ]];then
+		instCmd="apt-get"
+	elif ! [[ -z $IsDNF ]];then
+		instCmd="dnf"
+	else
+		echo "[Error]: -> [ERR_instsh_000] please report on: \n>> https://github.com/DerbanTW/DBTerminal/issues\n>> Distrubition unbekannt!"
+		exit 1
+	fi
+}
+
 # Install packages
 doInstallPackages() {
-	installPackages=ca-certificates,locales-all,curl,screen,tmux,htop,git,default-jdk,jq
+	installPackages=ca-certificates,locales-all,curl,screen,tmux,htop,git,jq
 	IFS=, read -a listPackages <<< "$installPackages"
 	for varPackage in "${listPackages[@]}";do 
 		isInstalled=$(dpkg-query -W -f='${Status}' $varPackage 2>/dev/null | grep -c "ok installed")
@@ -15,6 +29,24 @@ doInstallPackages() {
 			apt-get install -y $varPackage
 		fi
 	done
+}
+
+# Centos needs special args Argh
+doInstallJava() {
+	if ! [[ -z $IsAptGet ]];then
+		apt-get install -y default-jdk
+	elif ! [[ -z $IsDNF ]];then
+		jdk=" java-1.8.0-openjdk.x86_64"
+		jdkAvailbe=$(dnf search openjdk | grep -o $jdk)
+		if ! [[ -z $jdkAvailbe ]];then
+			dnf install -y java-1.8.0-openjdk.x86_64
+		else
+			echo "[Error]: -> [ERR_instsh_001] please report on: \n>> https://github.com/DerbanTW/DBTerminal/issues\n>> JavaPackage nicht gefunden!"
+		fi
+	else
+		echo "[Error]: -> [ERR_instsh_002] please report on: \n>> https://github.com/DerbanTW/DBTerminal/issues\n>> Distrubition unbekannt!"
+		exit 1
+	fi
 }
 
 # Support for äöü (todo: add entry in stdvariables and use inscript language to don't force other using german als std.).
@@ -83,7 +115,7 @@ createDBTDirectory() {
 # Download all Scripts in the DBT Directory
 downloadDBTScripts() {
 	if [[ -z $DBTDir ]];then
-		echo -e "[Error]: -> [ERR_instsh_001] please report on: \n>> https://github.com/DerbanTW/DBTerminal/issues"
+		echo -e "[Error]: -> [ERR_instsh_003] please report on: \n>> https://github.com/DerbanTW/DBTerminal/issues"
 		exit 1
 	fi
 	cd $DBTDir
@@ -134,7 +166,7 @@ downloadMCStartShell() {
 createMCDirectory() {
 	stdvarFile=""$DBTDir"stdvariables.sh"
 	if ! [[ -f $stdvarFile ]];then
-		echo -e "[Error]: -> [ERR_instsh_002] please report on: \n>> https://github.com/DerbanTW/DBTerminal/issues"
+		echo -e "[Error]: -> [ERR_instsh_004] please report on: \n>> https://github.com/DerbanTW/DBTerminal/issues"
 		exit 1
 	fi
 	fullmcDir=$(grep -o 'mcDir=[^"]*' $stdvarFile)
@@ -161,9 +193,9 @@ installCronJob() {
 echo Install Script started...
 
 cd $(dirname "$(readlink -fn "$0")")
-apt-get update
+checkDistro
 doInstallPackages
-apt-get update
+doInstallJava
 setLocalesDE
 fixBashrc
 installTMUXconf
