@@ -56,7 +56,7 @@ setLocalesDE() {
 		localesFile=/etc/default/locale
 		germanLang="LC_ALL=de_DE.UTF-8"
 		isGerman=$(cat $localesFile | grep -o $germanLang)
-		if ! [[ -z $isGerman ]];then
+		if [[ -z $isGerman ]];then
 			apt-get install locales-all
 			apt-get update
 			apt-get install -y locales
