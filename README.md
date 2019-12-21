@@ -15,7 +15,7 @@ In erster Linie ist DBT dazu gedacht, auf einem frisch installierten Debian-vSer
 Dabei werden alle nötigen Packages für DBT und Minecraft installiert, Standard-Ordner für DBT und Minecraft erstellt und die Scripte von DBT gedownloadet. Zudem wird sich DBT nach einem Reboot automatisch starten (Eintrag in der crontab).
 ```
 wget --no-check-certificate -P /YOUR_DIRECTORY/DBTerminal/ https://raw.githubusercontent.com/DerbanTC/DBTerminal/master/install.sh && chmod +x /YOUR_DIRECTORY/DBTerminal/install.sh
-cd YOUR_DIRECTORY
+cd /YOUR_DIRECTORY/DBTerminal/
 ./install.sh
 ```
 Wichtig: Ändere `YOUR_DIRECTORY` zu einem Ordner deiner Wahl z.B. `/home/`.
@@ -25,8 +25,8 @@ Wichtig: Ändere `YOUR_DIRECTORY` zu einem Ordner deiner Wahl z.B. `/home/`.
 - Es wird ein Ordner `minecraft` erstellt abhängig von dem Eintrag `mcDir` in der Datei `stdvariables.sh`
 - Standard-Ordner für Minecraft ist `/minecraft/`. Ändere den Eintrag `mcDir` und reboote dein Server
 
-**Getestete Distrubitionen**
-- Debian 9.9 (minimal)
+**Unterstützte Distrubitionen**
+- Debian 9.9 (minimal), Ubuntu 19.10 (minimal) & Fedora 23
 
 # MC-Features
 ### MC Schnell-Installation
