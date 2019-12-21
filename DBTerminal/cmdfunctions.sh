@@ -258,7 +258,7 @@ checkConfig() {
 		if [[ -f $bkupconfig ]];then
 			readConfig
 		else
-			echo -e "${lred}[ERROR]${norm}:[Terminal/CheckConfig]: -> Datei <backup.config> wurde nicht gefunden!"
+			echo -e "${lred}[ERROR/CheckConfig]: ${norm}-> Datei <backup.config> wurde nicht gefunden!"
 		fi
 	fi
 }
