@@ -93,7 +93,7 @@ fixBashrc() {
 
 # Add Mouse-Support (on/off with Alt-X/Y) 
 installTMUXconf() {
-	wget https://raw.githubusercontent.com/DerbanTC/bash/master/tmux.conf -O tmuxtmpfile
+	wget https://raw.githubusercontent.com/DerbanTC/DBTerminal/master/tmux.conf -O tmuxtmpfile
 	cp tmuxtmpfile ~/.tmux.conf && rm tmuxtmpfile
 }
 
