@@ -57,10 +57,10 @@ setLocalesDE() {
 		germanLang="LC_ALL=de_DE.UTF-8"
 		isGerman=$(cat $localesFile | grep -o $germanLang)
 		if ! [[ -z $isGerman ]];then
-			$instCmd install locales-all
-			$instCmd update
-			$instCmd install -y locales
-			locale-gen "LC_ALL=de_DE.UTF-8"
+			apt-get install locales-all
+			apt-get update
+			apt-get install -y locales
+			locale-gen "de_DE.UTF-8"
 			update-locale LC_ALL="de_DE.UTF-8"
 		fi
 	else
