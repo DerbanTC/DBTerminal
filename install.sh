@@ -13,7 +13,7 @@ checkDistro() {
 	elif ! [[ -z $IsDNF ]];then
 		instCmd="dnf"
 	else
-		echo "[Error]: -> [ERR_instsh_000] please report on: \n>> https://github.com/DerbanTW/DBTerminal/issues\n>> Distrubition unbekannt!"
+		echo "[Error]: -> [ERR_instsh_000] please report on: \n>> https://github.com/DerbanTC/DBTerminal/issues\n>> Distrubition unbekannt!"
 		exit 1
 	fi
 }
@@ -41,10 +41,10 @@ doInstallJava() {
 		if ! [[ -z $jdkAvailbe ]];then
 			dnf install -y java-1.8.0-openjdk.x86_64
 		else
-			echo "[Error]: -> [ERR_instsh_001] please report on: \n>> https://github.com/DerbanTW/DBTerminal/issues\n>> JavaPackage nicht gefunden!"
+			echo "[Error]: -> [ERR_instsh_001] please report on: \n>> https://github.com/DerbanTC/DBTerminal/issues\n>> JavaPackage nicht gefunden!"
 		fi
 	else
-		echo "[Error]: -> [ERR_instsh_002] please report on: \n>> https://github.com/DerbanTW/DBTerminal/issues\n>> Distrubition unbekannt!"
+		echo "[Error]: -> [ERR_instsh_002] please report on: \n>> https://github.com/DerbanTC/DBTerminal/issues\n>> Distrubition unbekannt!"
 		exit 1
 	fi
 }
@@ -92,7 +92,7 @@ fixBashrc() {
 
 # Add Mouse-Support (on/off with Alt-X/Y) 
 installTMUXconf() {
-	wget https://raw.githubusercontent.com/DerbanTW/bash/master/tmux.conf -O tmuxtmpfile
+	wget https://raw.githubusercontent.com/DerbanTC/bash/master/tmux.conf -O tmuxtmpfile
 	cp tmuxtmpfile ~/.tmux.conf && rm tmuxtmpfile
 }
 
@@ -122,7 +122,7 @@ downloadDBTScripts() {
 	fi
 	cd $DBTDir
 	DBTScripts=stdvariables.sh,functions.sh,mcfunctions.sh,cmdfunctions.sh,TerminalCMD.sh,reboundloop.sh,backup.sh
-	gitUrl=https://raw.githubusercontent.com/DerbanTW/DBTerminal/master/DBTerminal/
+	gitUrl=https://raw.githubusercontent.com/DerbanTC/DBTerminal/master/DBTerminal/
 	IFS=, read -a DBTScriptsArray <<< "$DBTScripts"
 	for varScript in "${DBTScriptsArray[@]}";do
 		if [[ -f $varScript ]];then
@@ -168,7 +168,7 @@ downloadMCStartShell() {
 createMCDirectory() {
 	stdvarFile=""$DBTDir"stdvariables.sh"
 	if ! [[ -f $stdvarFile ]];then
-		echo -e "[Error]: -> [ERR_instsh_004] please report on: \n>> https://github.com/DerbanTW/DBTerminal/issues"
+		echo -e "[Error]: -> [ERR_instsh_004] please report on: \n>> https://github.com/DerbanTC/DBTerminal/issues"
 		exit 1
 	fi
 	fullmcDir=$(grep -o 'mcDir=[^"]*' $stdvarFile)
