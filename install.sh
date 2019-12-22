@@ -197,10 +197,10 @@ installCronJob() {
 }
 
 # Fedora blocks all Ports by standard
-setIPTables() {
-	iptables -I INPUT -p tcp --dport 25552 --syn -j ACCEPT
-	service iptables save
-}
+#setIPTables() {
+#	iptables -I INPUT -p tcp --dport 25552 --syn -j ACCEPT
+#	service iptables save
+#}
 
 echo Install Script started...
 
