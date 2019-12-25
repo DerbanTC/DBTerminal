@@ -21,7 +21,7 @@ checkDistro() {
 # Install packages
 doInstallPackages() {
 	$instCmd update
-	installPackages=ca-certificates,locales-all,curl,screen,tmux,htop,git,jq
+	installPackages=ca-certificates,locales-all,curl,screen,tmux,htop,git,jq,fail2ban,ufw
 	IFS=, read -a listPackages <<< "$installPackages"
 	for varPackage in "${listPackages[@]}";do 
 		isInstalled=$(dpkg-query -W -f='${Status}' $varPackage 2>/dev/null | grep -c "ok installed")
