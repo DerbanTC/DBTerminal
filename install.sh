@@ -91,6 +91,16 @@ fixBashrc() {
 	fi
 }
 
+# Actually all ports closed without ssh & ftp
+setupFirewall() {
+	ufw disable
+	ufw default deny incoming
+	ufw default allow outgoing
+	ufw allow ssh
+	ufw allow ftp
+	ufw enable
+}
+
 # Add Mouse-Support (on/off with Alt-X/Y) 
 installTMUXconf() {
 	wget https://raw.githubusercontent.com/DerbanTC/DBTerminal/master/tmux.conf -O tmuxtmpfile
@@ -196,11 +206,6 @@ installCronJob() {
 	fi
 }
 
-# Fedora blocks all Ports by standard
-#setIPTables() {
-#	iptables -I INPUT -p tcp --dport 25552 --syn -j ACCEPT
-#	service iptables save
-#}
 
 echo Install Script started...
 
@@ -210,13 +215,13 @@ doInstallPackages
 doInstallJava
 setLocalesDE
 fixBashrc
+setupFirewall
 installTMUXconf
 createDBTDirectory
 downloadDBTScripts
 downloadMCStartShell
 createMCDirectory
 installCronJob
-setIPTables
 
 echo "Install packages finished!"
 
