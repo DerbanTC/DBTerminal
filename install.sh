@@ -98,7 +98,7 @@ setupFirewall() {
 	ufw default allow outgoing
 	ufw allow ssh
 	ufw allow ftp
-	ufw enable
+	ufw --force enable
 }
 
 # Add Mouse-Support (on/off with Alt-X/Y) 
@@ -122,7 +122,6 @@ createDBTDirectory() {
 		DBTDir="${PWD}/DBTerminal/"
 		copyfolder=""$DBTDir"copyfolder/"
 	fi
-	echo "0000 Copyfolder is [$copyfolder]"
 }
 
 # Download all Scripts in the DBT Directory
