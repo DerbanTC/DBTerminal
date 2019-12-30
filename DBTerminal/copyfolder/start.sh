@@ -84,9 +84,9 @@ echo -e "------------------------------------------------${norm}"
 
 while true; do
 	readBackupConf
-	readProperties
 	if [[ $doAutostart == true ]];then
 		echo -e "${bgreen}[INFO/start.sh]: -> Server [$mcServer] wird gestartet!${norm}"
+		readProperties
 		openPort $MCport
 		sleep 1
 		java -Xms3G -Xmx3G -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=40 -XX:G1MaxNewSizePercent=60 -XX:G1MixedGCLiveThresholdPercent=35 -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -Dusing.aikars.flags=mcflags.emc.gs -jar minecraft_server.jar
