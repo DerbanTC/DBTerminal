@@ -53,9 +53,9 @@ errorFunc() {
 
 openPort() {
 	if ! [[ -z $1 ]];then
-		countOpened=$(ufw status | grep $1 | grep -c ALLOW)
+		countOpened=$(/usr/sbin/ufw status | grep $1 | grep -c ALLOW)
 		if [[ $countOpened == 0 ]];then
-			ufw allow $1/tcp 1>/dev/null
+			/usr/sbin/ufw allow $1/tcp 1>/dev/null
 			echo -e "${bgreen}>> Port [$1/tcp] wurde geöffnet!${norm}"
 		fi
 	fi
@@ -63,9 +63,9 @@ openPort() {
 
 closePort() {
 	if ! [[ -z $1 ]];then
-		varPort=$(ufw status | grep $1 | grep ALLOW | grep v6 | cut -d ' ' -f1)
+		varPort=$(/usr/sbin/ufw status | grep $1 | grep ALLOW | grep v6 | cut -d ' ' -f1)
 		if ! [[ -z $varPort ]];then
-			ufw delete allow $varPort 1>/dev/null
+			/usr/sbin/ufw delete allow $varPort 1>/dev/null
 			echo -e "${black}${byellow}>> Port [$varPort] wurde geschlossen!${norm}"
 		fi
 	fi
