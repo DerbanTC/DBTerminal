@@ -3,6 +3,12 @@
 # wget --no-check-certificate -P /YOUR_DIRECTORY/DBTerminal/ https://raw.githubusercontent.com/DerbanTC/DBTerminal/master/install.sh && chmod +x /YOUR_DIRECTORY/DBTerminal/install.sh
 # ./install.sh
 
+#text-colors
+lred='\033[1;31m'
+lgreen='\033[1;32m'
+lblue='\033[1;34m'
+yellow='\033[1;33m'
+norm=$(tput sgr0)
 
 # apt-get vs dnf
 checkDistro() {
@@ -13,7 +19,7 @@ checkDistro() {
 	elif ! [[ -z $IsDNF ]];then
 		instCmd="dnf"
 	else
-		echo "[Error]: -> [ERR_instsh_000] please report on: \n>> https://github.com/DerbanTC/DBTerminal/issues\n>> Distrubition unbekannt!"
+		echo "${lred}[Error]: ${norm}-> [ERR_instsh_000] please report on: \n>> https://github.com/DerbanTC/DBTerminal/issues\n>> Distrubition unbekannt!"
 		exit 1
 	fi
 }
@@ -26,7 +32,7 @@ doInstallPackages() {
 	for varPackage in "${listPackages[@]}";do 
 		isInstalled=$(dpkg-query -W -f='${Status}' $varPackage 2>/dev/null | grep -c "ok installed")
 		if [[ $isInstalled == 0 ]];then
-			echo "[INFO]: -> Starte Installation von  [$varPackage]..."
+			echo -e "${yellow}[INFO]: ${norm}-> Starte Installation von [$varPackage]..."
 			$instCmd install -y $varPackage
 		fi
 	done
@@ -42,10 +48,10 @@ doInstallJava() {
 		if ! [[ -z $jdkAvailbe ]];then
 			dnf install -y java-1.8.0-openjdk.x86_64
 		else
-			echo "[Error]: -> [ERR_instsh_001] please report on: \n>> https://github.com/DerbanTC/DBTerminal/issues\n>> JavaPackage nicht gefunden!"
+			echo -e "${lred}[Error]: ${norm}-> [ERR_instsh_001] please report on: \n>> https://github.com/DerbanTC/DBTerminal/issues\n>> JavaPackage nicht gefunden!"
 		fi
 	else
-		echo "[Error]: -> [ERR_instsh_002] please report on: \n>> https://github.com/DerbanTC/DBTerminal/issues\n>> Distrubition unbekannt!"
+		echo -e "${lred}[Error]: ${norm}-> [ERR_instsh_002] please report on: \n>> https://github.com/DerbanTC/DBTerminal/issues\n>> Distrubition unbekannt!"
 		exit 1
 	fi
 }
@@ -86,11 +92,11 @@ fixBashrc() {
 	fi
 	if ! [[ $exportPathFound == true ]];then
 		echo -e "$fixPath" >> $bashrc
-		echo -e "[Done/fixBashrc]: -> Linie [$fixPath] wurde der Datei <$bashrc> hinzugefuegt!"
+		echo -e "${lgreen}[Done/fixBashrc]: ${norm}-> Linie [$fixPath] wurde der Datei <$bashrc> hinzugefuegt!"
 	fi
 	if ! [[ $autoConnectFound == true ]];then
 		echo -e "$autoConnect" >> $bashrc
-		echo -e "[Done/fixBashrc]: -> Linie [$autoConnect] wurde der Datei <$bashrc> hinzugefuegt!"
+		echo -e "${lgreen}[Done/fixBashrc]: ${norm}-> Linie [$autoConnect] wurde der Datei <$bashrc> hinzugefuegt!"
 	fi
 }
 
@@ -102,6 +108,8 @@ setupFirewall() {
 	/usr/sbin/ufw allow ssh
 	/usr/sbin/ufw allow ftp
 	/usr/sbin/ufw --force enable
+	echo -e "${lgreen}[DONE/setupFirewall]: ${norm}->Minimal Firewall Setup Done."
+	echo -e ">> SSH allowed, FTP allowed, default deny incoming, default allow outgoing"
 }
 
 # Add Mouse-Support (on/off with Alt-X/Y) 
@@ -145,6 +153,7 @@ downloadDBTScripts() {
 			varUrl=$gitUrl$varScript
 			wget $varUrl -qO $varScript
 			chmod +x $varScript
+			echo -e "${lgreen}[DONE/downloadDBTScripts]: ${norm}-> Script [$varScript] gedownloadet!"
 		fi
 	done
 }
@@ -170,8 +179,13 @@ downloadMCStartShell() {
 	else
 		mcMemory=$(( totalGB - 2 ))
 	fi
-	javaArg="java -Xms"$mcMemory"G -Xmx"$mcMemory"G -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=40 -XX:G1MaxNewSizePercent=60 -XX:G1MixedGCLiveThresholdPercent=35 -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -Dusing.aikars.flags=mcflags.emc.gs -jar minecraft_server.jar"
-	javaArgLine=$(grep -o 'java[^"]*' $mcStartShell)
+	if [[ $totalGB -gt 6 ]];then
+		javaArg="java -Xms"$mcMemory"G -Xmx"$mcMemory"G -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=40 -XX:G1MaxNewSizePercent=60 -XX:G1MixedGCLiveThresholdPercent=35 -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -Dusing.aikars.flags=mcflags.emc.gs -jar minecraft_server.jar"
+		javaArgLine=$(grep -o 'java[^"]*' $mcStartShell)
+	else
+		javaArg="java -Xms"$mcMemory"G -Xmx"$mcMemory"G -jar minecraft_server.jar"
+		JavaArgLine=$(grep -o 'java[^"]*' $mcStartShell)
+	fi
 	sed -i "s/$javaArgLine/$javaArg/g" $mcStartShell
 	echo -e "[INFO]: -> Minecraft-Server starten mit [$mcMemory/$totalGB] GB Ram ("$copyfolder"start.sh)"
 	cd $DBTDir
