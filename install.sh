@@ -96,12 +96,12 @@ fixBashrc() {
 
 # Actually all ports closed without ssh & ftp
 setupFirewall() {
-	ufw disable
-	ufw default deny incoming
-	ufw default allow outgoing
-	ufw allow ssh
-	ufw allow ftp
-	ufw --force enable
+	/usr/sbin/ufw disable
+	/usr/sbin/ufw default deny incoming
+	/usr/sbin/ufw default allow outgoing
+	/usr/sbin/ufw allow ssh
+	/usr/sbin/ufw allow ftp
+	/usr/sbin/ufw --force enable
 }
 
 # Add Mouse-Support (on/off with Alt-X/Y) 
