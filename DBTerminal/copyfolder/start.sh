@@ -71,11 +71,9 @@ closePort() {
 	fi
 }
 
-cd "$Selfpath"
+cd "$Selfpath" && readBackupConf
 echo -e "${yellow}[INFO/start.sh]: -> Script wurde gestartet..."
 echo -e "[INFO/start.sh]: -> Prüfe <$bkupconfig>...${norm}"
-
-readBackupConf
 
 echo -e "${bblue}>> $bkupconfig <<"
 echo -e "> AutoBackup = $doBackup "
@@ -94,11 +92,12 @@ while true; do
 		echo -e "${black}${byellow}[INFO/start.sh]: -> Server [$mcServer] wurde gestoppt...${norm}"
 		n=0
 	elif [[ $doAutostart == false ]];then
-		if [[ $n = 0 ]];then
+		n=$(( n + 1 )) && if [[ $n = 1 ]];then
 			echo -e "${black}${byellow}[INFO/start.sh]: -> Start von [$mcServer] wurde unterbrochen! (autorestart ist false)${norm}"
 			closePort $MCport
 			echo -e "${black}${byellow}>> 10-Sekunden Timer wurde gestartet. Warte auf Änderung der Config...${norm}"
-			n=1
+		elif [[ $n == 91 ]];then
+			echo -e "${black}${byellow}[INFO]: -> Keine Änderung seit 15min... Screen wird beendet!${norm}" && sleep 3 && exit 1
 		fi
 	else
 		errorFunc
