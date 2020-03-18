@@ -85,7 +85,6 @@ setProperties() {
 	fi
 }
 
-
 detachMCScreen() {
 	for screen in $(screen -ls | grep Attached);do
 		if [[ "$screen" == *"MCS_"* ]];then
@@ -307,20 +306,6 @@ printMCConfig() {
 		lastMsg="${lgreen}[INFO/backupConfig]: ${norm}-> Datei <$bkupconfName> nicht vorhanden!"
 	fi
 }
-
-#printMCConfigALL() {
-#	source ./stdvariables.sh
-#	localConf=/DBT/DBTerminal/data/localconf
-#	local n=1
-#	lastListMsg="${yellow}Lokale Config (MC-Einträge):${norm}" && declare -g "magic_variable_$n=$(echo -e "$lastListMsg")"
-#	local tmpfile="$tmpDir"wrklocalconf
-#	echo "mcServer:,Backup:,BackupTime:" > $tmpfile
-#	echo -e "$(grep "\-*$(hostname -i),*" $localConf | sed "s/ - $internalIP,//g" | sed "s/,,$/,empty,empty/" | sed "s/,,/,empty,/")" >> $tmpfile
-#	sed -i "s/false/$(echo -e "${lred}false${norm}")/g" $tmpfile && sed -i "s/empty/$(echo -e "${red}empty${norm}")/g" $tmpfile
-#	sed -i "s/[0-9][0-9]:[0-9][0-9]/$(echo -e "${lred}false${norm}")/g" $tmpfile
-#	local n=2
-#	lastListMsg=$(cat $tmpfile | column -s , -t) && declare -g "magic_variable_$n=$(echo -e "$lastListMsg")"
-#}
 
 printHelp() {
 	if ! [[ -z $1 ]];then
