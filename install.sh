@@ -107,7 +107,7 @@ downloadMCStartShell() {
 
 # Create Standard Minecraft-Directory (change the entry "mcDir=/path_to_your_folder/" in the stdvariables.sh.
 createMCDirectory() {
-	local stdvarFile=""$DBTDir"stdvariables.sh"
+	local stdvarFile="$DBTDir/stdvariables.sh"
 	if ! [[ -f $stdvarFile ]];then
 		echo -e "[Error]: -> [ERR_instsh_004] please report on: \n>> https://github.com/DerbanTC/DBTerminal/issues"
 		exit 1
