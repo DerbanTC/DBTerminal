@@ -69,7 +69,7 @@ downloadDBTScripts() {
 		exit 1
 	fi
 	cd $DBTDir
-	DBTScripts=backup.sh,cmdfunctions.sh,dataFunctions.sh,fixResources.sh,functions.sh,inject.sh,localCommands.sh,login.sh,mcfunctions.sh
+	DBTScripts=backup.sh,dataFunctions.sh,fixResources.sh,functions.sh,inject.sh,localCommands.sh,login.sh,mcfunctions.sh
 	DBTScripts=$DBTScripts,netCommands.sh,printFunctions.sh,printHelp.sh,reboundloop.sh,stdvariables.sh,TerminalCMD.sh
 	gitUrl=https://raw.githubusercontent.com/DerbanTC/DBTerminal/master/DBTerminal/
 	IFS=, read -a DBTScriptsArray <<< "$DBTScripts"
