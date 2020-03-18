@@ -2,8 +2,10 @@
 SelfPath="$(dirname "$(readlink -fn "$0")")/"
 cd $SelfPath
 source ./stdvariables.sh
-source ./printFunctions.sh
 source ./inject.sh
+dataFunction readDBTData
+source ./printFunctions.sh
+
 
 getBackupFunction updateCronJob &
 
