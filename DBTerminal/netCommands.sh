@@ -545,9 +545,6 @@ BackupCommands() {
 ### SSH COMMANDS
 sshCommands() {
 	local ipPattern="^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$"
-	if ! [[ $netHandler == majority ]];then 
-		lastMsg="> no extern server noted...use addMCServer or addBackupServer..." && return 1
-	fi
 	while true;do
 		clear && printHeader && printSTD && printLastMessage
 		echo -e "${yellow}[Terminal/SSH] Warte auf Eingabe..."

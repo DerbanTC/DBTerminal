@@ -2,6 +2,8 @@
 # Works for Debian 9.9 (minimal)
 # wget --no-check-certificate -P /YOUR_DIRECTORY/DBTerminal/ https://raw.githubusercontent.com/DerbanTC/DBTerminal/master/install.sh && chmod +x /YOUR_DIRECTORY/DBTerminal/install.sh
 
+gitUrl=https://raw.githubusercontent.com/DerbanTC/DBTerminal/master/DBTerminal/
+
 # Install packages
 doInstallPackages() {
 	apt-get update
@@ -67,8 +69,7 @@ downloadDBTScripts() {
 	fi
 	cd $DBTDir
 	DBTScripts=backup.sh,dataFunctions.sh,fixResources.sh,functions.sh,inject.sh,localCommands.sh,login.sh,mcfunctions.sh
-	DBTScripts=$DBTScripts,netCommands.sh,printFunctions.sh,printHelp.sh,reboundloop.sh,stdvariables.sh,TerminalCMD.sh
-	gitUrl=https://raw.githubusercontent.com/DerbanTC/DBTerminal/master/DBTerminal/
+	DBTScripts=$DBTScripts,netCommands.sh,printFunctions.sh,printHelp.sh,reboundloop.sh,sshfunctions.sh,stdvariables.sh,TerminalCMD.sh
 	IFS=, read -a DBTScriptsArray <<< "$DBTScripts"
 	for varScript in "${DBTScriptsArray[@]}";do
 		if [[ -f $varScript ]];then
@@ -89,7 +90,8 @@ downloadMCStartShell() {
 		echo -e "[INFO]: -> Datei <$mcStartShell> bereits vorhanden..."
 	else
 		echo -e "${yellow}>> Starte download von [$mcStartShell]...${norm}"
-		local varUrl=""$gitUrl"copyfolder/$mcStartShell"
+		local varUrl=""$gitUrl"copyfolder/start.sh"
+		echo -e "do \n[wget $varUrl -qO $mcStartShell]"
 		wget $varUrl -qO $mcStartShell
 	fi
 	local totalKB=$(free -m | awk '/^Mem:/{print $2}')
@@ -124,16 +126,15 @@ createMCDirectory() {
 echo Install Script started...
 
 cd $(dirname "$(readlink -fn "$0")")
-doInstallPackages
-doInstallJava
-setLocalesDE
-setupFirewall
-installTMUXconf
+#doInstallPackages
+#setLocalesDE
+#setupFirewall
+#installTMUXconf
 createDBTDirectory
-downloadDBTScripts
+#downloadDBTScripts
 downloadMCStartShell
-createMCDirectory
-./fixResources.sh
-screen -dmS "ReboundLoop" bash -c "$DBTDir/reboundloop.sh"
+#createMCDirectory
+#./fixResources.sh
+#screen -dmS "ReboundLoop" bash -c "$DBTDir/reboundloop.sh"
 
 echo "Install packages finished! Please open a new Terminal..."

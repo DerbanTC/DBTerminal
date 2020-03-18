@@ -57,20 +57,27 @@ doMCStart() {
 	fi
 	getFunction checkConditions
 	if [[ $StartIsEnabled =~ missingJar ]];then
+		echo A
 		lastMsg="${lred}[ERROR/Start]: ${norm}-> Keine <$jarName> gefunden!"
 	elif [[ $StartIsEnabled =~ isRunning ]];then
+		echo B
 		lastMsg="${lgreen}[INFO/Start]: ${norm}-> Server ${lblue}[$mcName] ${norm}läuft bereits."
 		getFunction changeTerminal TMUX00 screen,intern,MCS_$mcName	
 	elif [[ $StartIsEnabled == noStart ]];then
+		echo C
 		getMCFunction startMCScreen
 		getFunction changeTerminal TMUX00 screen,intern,MCS_$mcName	
 		lastMsg="${lgreen}[DONE/Start]: ${norm}-> Server ${lblue}[$mcName] ${norm}wird gestartet!"
 	elif [[ $StartIsEnabled =~ doNewInstall ]];then
+		echo D && sleep 5
 		echo -e "${lgreen}[INFO/Start]: ${norm}-> Installiere Server..." && printSTD
 		getFunction changeTerminal TMUX00 screen,intern,MCS_$mcName	
 		getFunction waitUntilScreen "MCS_$mcName" &
 		getMCFunction installMC
-	fi	
+	else
+		lastMsg="> ERROR unknown state Code [doMCStrt_001]"
+	fi
+
 }
 
 doMCStop() {

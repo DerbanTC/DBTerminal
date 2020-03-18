@@ -6,8 +6,7 @@
 
 mcServer=${PWD##*/}
 Selfpath=$(dirname "$(readlink -fn "$0")")
-Config=$Selfpath/BackupConfig.txt
-bkupconfig=$Selfpath/BackupConfig.txt
+bkupconfig=$Selfpath/dbtbackup.conf
 mcSrvProperties=$Selfpath/server.properties
 freeMem=$(free -h  | grep ^Mem | tr -s ' ' | cut -d ' ' -f 4)
 
