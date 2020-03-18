@@ -134,6 +134,6 @@ downloadDBTScripts
 downloadMCStartShell
 createMCDirectory
 ./fixResources.sh
-screen -dmS "ReboundLoop" bash -c "$DBTDIR/reboundloop.sh"
+screen -dmS "ReboundLoop" bash -c "$DBTDir/reboundloop.sh"
 
 echo "Install packages finished! Please open a new Terminal..."
