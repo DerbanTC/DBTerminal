@@ -126,15 +126,16 @@ createMCDirectory() {
 echo Install Script started...
 
 cd $(dirname "$(readlink -fn "$0")")
-#doInstallPackages
-#setLocalesDE
-#setupFirewall
-#installTMUXconf
+doInstallPackages
+setLocalesDE
+setupFirewall
+installTMUXconf
 createDBTDirectory
-#downloadDBTScripts
+downloadDBTScripts
 downloadMCStartShell
-#createMCDirectory
-#./fixResources.sh
-#screen -dmS "ReboundLoop" bash -c "$DBTDir/reboundloop.sh"
-
+createMCDirectory
+./fixResources.sh
+if [[ -z $(screen -ls | grep ReboundLoop) ]];then
+	screen -dmS "ReboundLoop" bash -c "$DBTDir/reboundloop.sh"
+fi
 echo "Install packages finished! Please open a new Terminal..."
