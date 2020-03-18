@@ -88,7 +88,7 @@ netCommands() {
 				clear && netCommand ServerList
 			;;
 			ServerWahl) #done
-				clear && netCommand ServerWahl			
+				clear && netCommand ServerWahl
 			;;
 			ServerCheck) #done
 				clear && localCommand doServerCheck
