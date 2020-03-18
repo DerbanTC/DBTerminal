@@ -121,7 +121,12 @@ setLocalData() {
 				echo -e "$newEntry" >> $tmpLocalData
 			fi
 		fi
-	done && cd $SelfPath && cp $tmpLocalData $localData
+	done && cd $SelfPath && 
+	if [[ -f $tmpLocalData ]];then
+		cp $tmpLocalData $localData
+	else
+		touch $localData
+	fi
 }
 
 readLocalData() {
