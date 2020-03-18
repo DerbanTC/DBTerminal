@@ -1,5 +1,5 @@
 #!/bin/bash
-# Works for Debian 9.9 (minimal)
+# Works for Debian 19.10 (minimal)
 # wget --no-check-certificate -P /YOUR_DIRECTORY/DBTerminal/ https://raw.githubusercontent.com/DerbanTC/DBTerminal/master/install.sh && chmod +x /YOUR_DIRECTORY/DBTerminal/install.sh
 
 gitUrl=https://raw.githubusercontent.com/DerbanTC/DBTerminal/master/DBTerminal/
