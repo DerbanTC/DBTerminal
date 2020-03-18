@@ -49,7 +49,7 @@ installTMUXconf() {
 createDBTDirectory() {
 	actDir=${PWD##*/}
 	if [[ $actDir == DBTerminal ]];then
-		DBTDir="${PWD}/"
+		DBTDir="${PWD}"
 	elif [[ -z $(ls -d */ 2>/dev/null) ]] || ! [[ $(ls -d */ | grep -c DBTerminal/) == 1 ]];then
 		DBTDir="${PWD}/DBTerminal"
 		echo -e "[DONE]: -> Neuer Ordner <$DBTDir> wird erstellt..."
@@ -83,44 +83,42 @@ downloadDBTScripts() {
 }
 
 downloadMCStartShell() {
-	mcStartShell=start.sh
-	if ! [[ -d $copyfolder ]];then
-		mkdir -p $copyfolder
-	fi
-	cd $copyfolder
+	local copyfolder="$DBTDir/copyfolder"
+	local mcStartShell="$copyfolder/start.sh"
+	echo "copyfolder is [$copyfolder]"
+	echo "mcStartShell is [$mcStartShell]"
 	if [[ -f $mcStartShell ]];then
 		echo -e "[INFO]: -> Datei <$mcStartShell> bereits vorhanden..."
 	else
 		echo -e "${yellow}>> Starte download von [$mcStartShell]...${norm}"
-		cd $copyfolder
-		varUrl=""$gitUrl"copyfolder/$mcStartShell"
+		local varUrl=""$gitUrl"copyfolder/$mcStartShell"
 		wget $varUrl -qO $mcStartShell
 	fi
-	totalKB=$(free -m | awk '/^Mem:/{print $2}')
-	totalGB=$(( totalKB / 1024 ))
+	local totalKB=$(free -m | awk '/^Mem:/{print $2}')
+	local totalGB=$(( totalKB / 1024 ))
 	if [[ $totalGB -lt 9 ]];then
-		mcMemory=$(( totalGB - 1 ))
+		local mcMemory=$(( totalGB - 1 ))
 	else
-		mcMemory=$(( totalGB - 2 ))
+		local mcMemory=$(( totalGB - 2 ))
 	fi
-	javaArg="java -Xms"$mcMemory"G -Xmx"$mcMemory"G -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=40 -XX:G1MaxNewSizePercent=60 -XX:G1MixedGCLiveThresholdPercent=35 -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -Dusing.aikars.flags=mcflags.emc.gs -jar minecraft_server.jar"
-	javaArgLine=$(grep -o 'java[^"]*' $mcStartShell)
+	local javaArg="java -Xms"$mcMemory"G -Xmx"$mcMemory"G -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=40 -XX:G1MaxNewSizePercent=60 -XX:G1MixedGCLiveThresholdPercent=35 -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -Dusing.aikars.flags=mcflags.emc.gs -jar minecraft_server.jar"
+	local javaArgLine=$(grep -o 'java[^"]*' $mcStartShell)
 	sed -i "s/$javaArgLine/$javaArg/g" $mcStartShell
-	echo -e "[INFO]: -> Minecraft-Server starten mit [$mcMemory/$totalGB] GB Ram ("$copyfolder"start.sh)"
-	cd $DBTDir
+	echo -e "[INFO]: -> Minecraft-Server starten mit [$mcMemory/$totalGB] GB Ram ($mcStartShell)"
 }
 
 # Create Standard Minecraft-Directory (change the entry "mcDir=/path_to_your_folder/" in the stdvariables.sh.
 createMCDirectory() {
-	stdvarFile=""$DBTDir"stdvariables.sh"
+	local stdvarFile=""$DBTDir"stdvariables.sh"
 	if ! [[ -f $stdvarFile ]];then
 		echo -e "[Error]: -> [ERR_instsh_004] please report on: \n>> https://github.com/DerbanTC/DBTerminal/issues"
 		exit 1
 	fi
-	fullmcDir=$(grep -o 'mcDir=[^"]*' $stdvarFile)
-	stdmcDir=${fullmcDir#*=}
+	local fullmcDir=$(grep -o 'mcDir=[^"]*' $stdvarFile)
+	local stdmcDir=${fullmcDir#*=}
+	mkdir -p "$stdmcDir"YourServer/
 	if ! [[ -d $stdmcDir ]];then
-		mkdir -p ""$stdmcDir"YourServer/"
+		mkdir -p "$stdmcDir"YourServer/
 		echo -e "[DONE]: -> Neuer Ordner <$stdmcDir> erstellt."
 	fi
 }
@@ -140,4 +138,3 @@ createMCDirectory
 ./fixResources.sh
 
 echo "Install packages finished! Please reboot..."
-
