@@ -9,6 +9,7 @@ Selfpath=$(dirname "$(readlink -fn "$0")")
 Config=$Selfpath/BackupConfig.txt
 bkupconfig=$Selfpath/BackupConfig.txt
 mcSrvProperties=$Selfpath/server.properties
+freeMem=$(free -h  | grep ^Mem | tr -s ' ' | cut -d ' ' -f 4)
 
 norm=$(tput sgr0)
 yellow='\033[1;33m'
@@ -34,6 +35,9 @@ readProperties() {
 	if [[ -f $mcSrvProperties ]];then
 		MCportfull=$(grep -o 'server-port[^"]*' $mcSrvProperties)
 		MCport=${MCportfull#*=}
+		if [[ -z $(grep -o 'server-ip=.*' $mcSrvProperties | cut -f2 -d=) ]];then
+			sed -i "s/server-ip=.*/server-ip=$(hostname -i)/g" $mcSrvProperties
+		fi
 	fi
 }
 
@@ -76,8 +80,8 @@ echo -e "${yellow}[INFO/start.sh]: -> Script wurde gestartet..."
 echo -e "[INFO/start.sh]: -> Prüfe <$bkupconfig>...${norm}"
 
 echo -e "${bblue}>> $bkupconfig <<"
-echo -e "> AutoBackup = $doBackup "
-echo -e "> AutoRestart = $doAutostart "
+echo -e "> AutoBackup = $doBackup"
+echo -e "> AutoRestart = $doAutostart"
 echo -e "------------------------------------------------${norm}"
 
 while true; do
@@ -88,8 +92,7 @@ while true; do
 		openPort $MCport
 		sleep 1
 		java -Xms3G -Xmx3G -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=40 -XX:G1MaxNewSizePercent=60 -XX:G1MixedGCLiveThresholdPercent=35 -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -Dusing.aikars.flags=mcflags.emc.gs -jar minecraft_server.jar
-		echo -e ""
-		echo -e "${black}${byellow}[INFO/start.sh]: -> Server [$mcServer] wurde gestoppt...${norm}"
+		echo -e "\n${black}${byellow}[INFO/start.sh]: -> Server [$mcServer] wurde gestoppt...${norm}"
 		n=0
 	elif [[ $doAutostart == false ]];then
 		n=$(( n + 1 )) && if [[ $n = 1 ]];then
@@ -97,7 +100,7 @@ while true; do
 			closePort $MCport
 			echo -e "${black}${byellow}>> 10-Sekunden Timer wurde gestartet. Warte auf Änderung der Config...${norm}"
 		elif [[ $n == 91 ]];then
-			echo -e "${black}${byellow}[INFO]: -> Keine Änderung seit 15min... Screen wird beendet!${norm}" && sleep 3 && exit 1
+			echo -e "${black}${byellow}[INFO]: -> Keine Änderung seit 15min... Screen wird beendet!${norm}" && sleep 10 && exit 1
 		fi
 	else
 		errorFunc

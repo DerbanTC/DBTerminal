@@ -2,10 +2,7 @@
 SelfPath="$(dirname "$(readlink -fn "$0")")/"
 cd $SelfPath
 source ./stdvariables.sh
-
-getFunction() {
-	source ""$SelfPath"functions.sh" $1 $2 $3
-}
+source ./inject.sh
 
 Terminal() {
 	tmux new-session -s Terminal -d bash
@@ -16,7 +13,7 @@ Terminal() {
 	tmux send-key -t Terminal:0.1 "clear" C-m
 	tmux send-key -t Terminal:0.1 "screen -r TerminalCMD" C-m
 	tmux send-key -t Terminal:0.2 "clear" C-m
-	tmux send-key -t Terminal:0.2 "htop" C-m
+	getFunction reboundTerminal
 }
 
 getFunction getTime
@@ -43,24 +40,23 @@ while true; do
 	if ! $(tmux ls | grep -q Terminal);then
 		echo -e "[INFO]: TMUX-Session [TerminalCMD] wurde nicht gefunden! Initialisiere TMUX..."
 		Terminal
-	elif [[  $(tmux ls | grep -q Terminal | tmux display-message -p '#{window_panes}') != 3 ]];then
+	elif [[ $(tmux ls | grep -q Terminal | tmux display-message -p '#{window_panes}') != 3 ]];then
 		echo -e "[INFO]: TMUX-Session [TerminalCMD] hat nicht 3 Panes! Initialisiere neu..."
-		tmux kill-session -t Terminal
-		Terminal
+		tmux kill-session -t Terminal && Terminal
 	fi
 
 	countSlashes=$(echo $mcDir | grep -o "/" | wc -l)
 	lastSlash=$(( countSlashes +1 ))
-	for mcServer in $(ls -d $mcDir*/ | cut -f$lastSlash -d'/');do
+	for mcName in $(ls -d $mcDir*/ | cut -f$lastSlash -d'/');do
 		getFunction checkConditions
 		if [[ $StartIsEnabled == doStart ]];then
-			getFunction startMCScreen
+			getMCFunction startMCScreen
 			getFunction getTime
 			if ! [[ $actDate == $date ]];then
 				echo "[Timestamp]: Date:[$date] Time:[$time]"
 				actDate=$date
 			fi
-			echo "[$time INFO]: Server [$mcServer] wurde gestartet"
+			echo "[$time INFO]: Server [$mcName] wurde gestartet"
 		fi
 	done
 	sleep 5
