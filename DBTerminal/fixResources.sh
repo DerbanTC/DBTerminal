@@ -12,7 +12,7 @@ cleanFile() {
 
 installCronJob() {
 	local CRON_FILE=/var/spool/cron/crontabs/root
-	local cronJob="@reboot screen -dmS \"ReboundLoop\" bash -c \"$DBTDIR/reboundloop.sh\""
+	local cronJob="@reboot screen -dmS \"ReboundLoop\" bash -c \""$SelfPath"reboundloop.sh\""
 	rmAllJobs() {
 		sed -i "s/$searchJob.*//g" $CRON_FILE
 		cleanFile $CRON_FILE
@@ -66,6 +66,7 @@ fixDBTDIR() {
 		adjustBashrc "export PATH=.*" "$pathEntry"
 	fi
 	cleanFile $bashrc
+	
 }
 
 fixSTDprofile() {
