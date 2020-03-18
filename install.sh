@@ -91,7 +91,6 @@ downloadMCStartShell() {
 	else
 		echo -e "${yellow}>> Starte download von [$mcStartShell]...${norm}"
 		local varUrl=""$gitUrl"copyfolder/start.sh"
-		echo -e "do \n[wget $varUrl -qO $mcStartShell]"
 		wget $varUrl -qO $mcStartShell
 	fi
 	local totalKB=$(free -m | awk '/^Mem:/{print $2}')
