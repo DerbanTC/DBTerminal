@@ -85,8 +85,6 @@ downloadDBTScripts() {
 downloadMCStartShell() {
 	local copyfolder="$DBTDir/copyfolder"
 	local mcStartShell="$copyfolder/start.sh"
-	echo "copyfolder is [$copyfolder]"
-	echo "mcStartShell is [$mcStartShell]"
 	if [[ -f $mcStartShell ]];then
 		echo -e "[INFO]: -> Datei <$mcStartShell> bereits vorhanden..."
 	else
