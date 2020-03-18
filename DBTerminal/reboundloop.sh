@@ -10,9 +10,10 @@ Terminal() {
 	tmux split-window -v -p 50 -t Terminal
 	tmux split-window -h -p 50 -t Terminal
 	echo -e "[INFO]: TMUX-Session [TerminalCMD] wurde initialisiert!"
+	tmux send-key -t Terminal:0.0 "clear" C-m
 	tmux send-key -t Terminal:0.1 "clear" C-m
-	tmux send-key -t Terminal:0.1 "screen -r TerminalCMD" C-m
 	tmux send-key -t Terminal:0.2 "clear" C-m
+	tmux send-key -t Terminal:0.1 "screen -r TerminalCMD" C-m
 	getFunction reboundTerminal
 }
 
@@ -62,4 +63,3 @@ while true; do
 	sleep 5
 
 done
-

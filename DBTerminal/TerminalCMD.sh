@@ -20,40 +20,40 @@ localCommands() {
 		command="${INPUT_STRING[0]}"
 		arg1="${INPUT_STRING[1]}" && arg2="${INPUT_STRING[2]}"
 		case $command in
-			ServerList) #done
+			ServerList)
 				clear && localCommand ServerList
 			;;
-			ServerWahl) #done
+			ServerWahl)
 				clear && localCommand ServerWahl
 			;;
-			ServerCheck) #done
+			ServerCheck)
 				clear && localCommand doServerCheck
 			;;
-			Start) #done
+			Start)
 				clear && localCommand doMCStart
 			;;
-			Stop) #done
+			Stop)
 				localCommand doMCStop
 			;;
-			Restart) #done
+			Restart)
 				clear && localCommand doMCRestart
 			;;
-			GetScreen) #done
+			GetScreen)
 				clear && localCommand GetScreen
 			;;
-			SendText) #done
+			SendText)
 				clear && localCommand sendText
 			;;
-			mcConfig) #done
+			mcConfig)
 				clear && localCommand mcConfig
 			;;
-			pingOther) #done
+			pingOther)
 				clear && localCommand doPingOther $arg1 $arg2
 			;;
-			htop) #done
+			htop)
 				clear && localCommand htop
 			;;
-			Backup) #done
+			Backup)
 				clear && localCommand BackupCommands
 			;;
 			HotKey)
@@ -81,40 +81,40 @@ netCommands() {
 		command="${INPUT_STRING[0]}"
 		arg1="${INPUT_STRING[1]}" && arg2="${INPUT_STRING[2]}"
 		case $command in
-			GetScreen) #done
+			GetScreen)
 				netCommand GetScreen "$arg1"
 			;;
-			ServerList) #done
+			ServerList)
 				clear && netCommand ServerList
 			;;
-			ServerWahl) #done
+			ServerWahl)
 				clear && netCommand ServerWahl
 			;;
-			ServerCheck) #done
+			ServerCheck)
 				clear && localCommand doServerCheck
 			;;
-			Start) #done
+			Start)
 				netCommand doMCStart
 			;;
-			Stop) #done
+			Stop)
 				netCommand doMCStop
 			;;
-			Restart) #done
+			Restart)
 				netCommand doMCRestart
 			;;
-			SendText) #done
+			SendText)
 				netCommand sendText
 			;;
-			mcConfig) #done
+			mcConfig)
 				netCommand mcConfig
 			;;
-			pingOther) #done
+			pingOther)
 				clear && localCommand doPingOther $arg1 $arg2
 			;;
-			htop) #done
+			htop)
 				netCommand htop
 			;;
-			Backup)  #done
+			Backup)
 				clear && netCommand BackupCommands
 			;;
 			SSH)
@@ -146,40 +146,40 @@ localCommands() {
 		command="${INPUT_STRING[0]}"
 		arg1="${INPUT_STRING[1]}" && arg2="${INPUT_STRING[2]}"
 		case $command in
-			ServerList) #done
+			ServerList)
 				clear && localCommand ServerList
 			;;
-			ServerWahl) #done
+			ServerWahl)
 				clear && localCommand ServerWahl
 			;;
-			ServerCheck) #done
+			ServerCheck)
 				clear && localCommand doServerCheck
 			;;
-			Start) #done
+			Start)
 				clear && localCommand doMCStart
 			;;
-			Stop) #done
+			Stop)
 				localCommand doMCStop
 			;;
-			Restart) #done
+			Restart)
 				clear && localCommand doMCRestart
 			;;
-			GetScreen) #done
+			GetScreen)
 				clear && localCommand GetScreen
 			;;
-			SendText) #done
+			SendText)
 				clear && localCommand sendText
 			;;
-			mcConfig) #done
+			mcConfig)
 				clear && localCommand mcConfig
 			;;
-			pingOther) #done
+			pingOther)
 				clear && localCommand doPingOther $arg1 $arg2
 			;;
-			htop) #done
+			htop)
 				clear && localCommand htop
 			;;
-			Backup) #done
+			Backup)
 				clear && localCommand BackupCommands
 			;;
 			SSH)

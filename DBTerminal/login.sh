@@ -60,16 +60,21 @@ printLoginHeader() {
 		echo -e "${yellow}$(for i in $(seq 1 $(tput cols | cut -f2 -d' ')); do echo -n -; done)${norm}"
 		if [[ -z $(screen -ls | grep ReboundLoop) ]];then
 			echo -e "$header Screen [ReboundLoop] not found..\n> something wents wrong, please take a look on (crontab -l) and reboot..."
+			loginError=true
 		elif [[ -z $(pgrep -c tmux) ]];then
 			echo -e "$header TMUX not running..\n> something wents wrong, please take a look on (screen -r ReboundLoop)"
+			loginError=true
 		elif [[ -z $(tmux ls | grep Terminal) ]];then
 			echo -e "$header TMUX-Session [Terminal] not found..\n> something wents wrong, pleasy take a look on (screen -r ReboundLoop)"
+			loginError=true
 		elif ! [[ -z $(tmux ls | grep Terminal | grep attached) ]];then
 			echo -e "$header TMUX-Session [Terminal] already attached.\n> Do not type (tmux a -t Terminal)!"
+			loginError=true
 		elif [[ -z $(tmux ls | grep Terminal | grep attached) ]];then
 			echo -e "$header Welcome back..."
 		else
 			echo -e "$header unknown state, please report on github"
+			loginError=true
 		fi
 		echo -e "${yellow}$(for i in $(seq 1 $(tput cols | cut -f2 -d' ')); do echo -n -; done)${norm}"
 	}
@@ -85,7 +90,7 @@ printLoginHeader() {
 	}
 
 	printINFO
-	if [[ -z $(tmux ls | grep Terminal | grep attached) ]];then
+	if [[ -z $loginError ]] ;then
 		ConnectTerminal
 	fi
 }
