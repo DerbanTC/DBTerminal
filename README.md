@@ -26,7 +26,7 @@ Wichtig: Ändere `YOUR_DIRECTORY` zu einem Ordner deiner Wahl z.B. `/home/`.
 - Standard-Ordner für Minecraft ist `/minecraft/`. Ändere den Eintrag `mcDir` und reboote dein Server
 
 **Unterstützte Distrubitionen**
-- Debian 9.9 (minimal), Ubuntu 19.10 (minimal) & Fedora 23
+- Debian 10.2 (minimal)
 
 # MC-Features
 ### MC Schnell-Installation
