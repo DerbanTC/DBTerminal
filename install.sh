@@ -50,14 +50,11 @@ createDBTDirectory() {
 	actDir=${PWD##*/}
 	if [[ $actDir == DBTerminal ]];then
 		DBTDir="${PWD}/"
-		copyfolder="$DBTDir/{copyfolder,data,log,tmp}"
 	elif [[ -z $(ls -d */ 2>/dev/null) ]] || ! [[ $(ls -d */ | grep -c DBTerminal/) == 1 ]];then
 		DBTDir="${PWD}/DBTerminal"
-		copyfolder="$DBTDir/{copyfolder,data,log,tmp}"
 		echo -e "[DONE]: -> Neuer Ordner <$DBTDir> wird erstellt..."
 	else
 		DBTDir="${PWD}/DBTerminal"
-		copyfolder="$DBTDir/{copyfolder,data,log,tmp}"
 	fi
 	mkdir -p $DBTDir/{copyfolder,data,log,tmp}
 }
