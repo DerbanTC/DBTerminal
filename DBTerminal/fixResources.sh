@@ -12,6 +12,7 @@ cleanFile() {
 
 installCronJob() {
 	local CRON_FILE=/var/spool/cron/crontabs/root
+	local cronJob="@reboot screen -dmS \"ReboundLoop\" bash -c \"$DBTDIR/reboundloop.sh\""
 	rmAllJobs() {
 		sed -i "s/$searchJob.*//g" $CRON_FILE
 		cleanFile $CRON_FILE
@@ -20,14 +21,17 @@ installCronJob() {
 		crontab -l 2>/dev/null | { cat; echo "$cronJob"; } | crontab -
 		cleanFile $CRON_FILE
 	}
-	cronJob="@reboot screen -dmS \"ReboundLoop\" bash -c \"$DBTDIR/reboundloop.sh\""
-	searchJob="@reboot screen -dmS \"ReboundLoop\" bash -c.*"
-	cronExist=$(grep -o "$cronJob" $CRON_FILE 2>/dev/null)
-	cronCount=$(grep -c "$searchJob" $CRON_FILE 2>/dev/null)
-	if [[ -z $cronExist ]] || [[ $(grep -c "@reboot screen -dmS \"ReboundLoop\".*" $CRON_FILE 2>/dev/null) -gt 1 ]];then
-		rmAllJobs
-		addNewJob
-		cleanFile $CRON_FILE
+	if [[ -f $CRON_FILE ]];then
+		local searchJob="@reboot screen -dmS \"ReboundLoop\" bash -c.*"
+		local cronExist=$(grep -o "$cronJob" $CRON_FILE 2>/dev/null)
+		local cronCount=$(grep -c "$searchJob" $CRON_FILE 2>/dev/null)
+		if [[ -z $cronExist ]] || [[ $(grep -c "@reboot screen -dmS \"ReboundLoop\".*" $CRON_FILE 2>/dev/null) -gt 1 ]];then
+			rmAllJobs
+			addNewJob
+			cleanFile $CRON_FILE
+		fi
+	else
+		echo -e "$cronJob" >> $CRON_FILE
 	fi
 }
 
@@ -100,13 +104,13 @@ fixScreenrc() {
 	local screenEntry1="bindkey "^C" echo 'Blocked! Kill -> [Ctrl+A] + [Enter] + [Y] Detach -> [Ctrl-A] + [D]'"
 	local screenEntry2="bindkey "^D" echo 'Blocked! Kill -> [Ctrl+A] + [Enter] + [Y] Detach -> [Ctrl-A] + [D]'"
 	local screenEntry3="bind ^M quit"
-	if [[ -z $(grep "$screenEntry1" $screenRC) ]];then
+	if [[ -z $(grep -F "$screenEntry1" $screenRC) ]];then
 		echo "$screenEntry1" >> $screenRC
 	fi
-	if [[ -z $(grep "$screenEntry2" $screenRC) ]];then
+	if [[ -z $(grep -F "$screenEntry2" $screenRC) ]];then
 		echo "$screenEntry2" >> $screenRC
 	fi
-	if [[ -z $(grep "$screenEntry3" $screenRC) ]];then
+	if [[ -z $(grep -F "$screenEntry3" $screenRC) ]];then
 		echo "$screenEntry3" >> $screenRC
 	fi
 }
