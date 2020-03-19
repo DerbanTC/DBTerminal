@@ -17,27 +17,25 @@ getFunction() {
 #############################################################################
 fixEntries() {
 	n=0
-	while IFS= read -r line; do
-		n=$(( n +1 ))
-		c=$(echo $line | cut -f 1 -d '=' | cut -f 3 -d 'r') #MCServer5=xxx -> MCServer5 -> 5
-		empty=$(echo $line | cut -f 2 -d '=')
-		if [[ -z $empty ]];then
-			sed -i "s/$line//g" $dataFile
-			sed -i '/^$/g' $dataFile
-		elif ! [[ $n == $c ]];then
-			varIP=$(echo $line | cut -f 2 -d '=')
-			new=MCServer$n=$varIP
-			sed -i "s/$line/$new/g" $dataFile
+	for fullEntry in $(grep -E "^MCServer[0-9]+=.*" $dataFile);do
+		varEntry=$(echo $fullEntry | cut -f2 -d=)
+		if [[ -z $varEntry ]];then
+			sed -i "s/$fullEntry//g" $dataFile
+		else
+			n=$(( n + 1 ))
+			if ! [[ $(echo $fullEntry | cut -f1 -d=) == "MCServer$n" ]];then
+				sed -i "s/$fullEntry/MCServer$n=$varEntry/g" $dataFile
+			fi
+			
 		fi
-	done < $dataFile
+	done
+	sed -i '/^\s*$/d' $dataFile
 }
 
 addMCSrvEntry() {
 	fixEntries && varIP=$1
-	countMCSrv=$(grep -c MCServer $dataFile)
-	catch=$(grep -c MCServer[0-9]=$varIP $dataFile)
-	if [[ $catch == 0 ]];then
-		nr=$(( countMCSrv +1 ))
+	if [[ -z $(grep -oE "^MCServer[0-9]=$varIP" $dataFile) ]];then
+		nr=$(( $(grep -Ec "^MCServer[0-9]+=.*" $dataFile) +1 ))
 		echo -e "MCServer$nr=$1" >> $dataFile
 	fi
 }
@@ -281,6 +279,7 @@ setSyncData() {
 			VarTmpsyncdata="$varDBTDir"tmp/tmpsyncdata
 			getSSHFunction runExternScript $externMCServer dataFunctions.sh setTempSyncData
 			scp -q -i $dbtKeyFile -P $stdSSHport root@$externMCServer:$VarTmpsyncdata $tempDir
+			getSSHFunction runExternScript $externMCServer dataFunctions.sh setTempSyncData delete
 			tmpsyncdata="$SelfPath"tmp/tmpsyncdata
 			if [[ -f $tmpsyncdata ]];then
 				varIP=$(grep internalIP= $tmpsyncdata | cut -f2 -d'=')
@@ -300,6 +299,7 @@ setSyncData() {
 			VarTmpsyncdata="$varDBTDir"tmp/tmpsyncdata
 			getSSHFunction runExternScript $BackupServer dataFunctions.sh setTempSyncData
 			scp -q -i $dbtKeyFile -P $stdSSHport root@$BackupServer:$VarTmpsyncdata $tempDir
+			getSSHFunction runExternScript $BackupServer dataFunctions.sh setTempSyncData delete
 			tmpsyncdata="$SelfPath"tmp/tmpsyncdata
 			if [[ -f $tmpsyncdata ]];then
 				varIP=$(grep internalIP= $tmpsyncdata | cut -f2 -d'=')
@@ -314,10 +314,12 @@ setSyncData() {
 }
 
 setTempSyncData() {
-	source ./stdvariables.sh
 	tmpsyncdata="$SelfPath"tmp/tmpsyncdata
-	echo -e "internalIP=$internalIP\ndbtDir=$SelfPath\nbackupDir=$backupDir\nmcDir=$mcDir" > $tmpsyncdata
-	sleep 30 && rm $tmpsyncdata &
+	if [[ $1 == delete ]];then
+		rm $tmpsyncdata
+	else
+		echo -e "internalIP=$internalIP\ndbtDir=$SelfPath\nbackupDir=$backupDir\nmcDir=$mcDir" > $tmpsyncdata
+	fi
 }
 
 readSyncData() {

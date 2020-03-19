@@ -13,7 +13,7 @@ getMCFunction() {
 	source ""$SelfPath"mcfunctions.sh" $1 $2 $3 $4 $5
 }
 getSSHFunction() {
-	source ""$SelfPath"sshfunctions.sh" "$1" "$2" "$3" "$4" "$5"
+	source ""$SelfPath"sshfunctions.sh" "$1" "$2" "$3" "$4" "$5" "$6" "$7" "$8"
 }
 getBackupFunction() {
 	source ""$SelfPath"backup.sh" $1 $2 $3

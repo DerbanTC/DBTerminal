@@ -295,7 +295,7 @@ mcConfig() {
 downloadMC() {
 	askServerVersion() {
 		unset ServerVersion && while [[ -z $ServerVersion ]] && [[ -z $stopFunction ]];do
-			clear && printHeader && printSTD && printFunction printAvaibleVersions $ServerType && printLastMSG
+			clear && printFunction printHeader && printFunction printSTD && printFunction printAvaibleVersions $ServerType && printLastMSG
 			if ! [[ -z $askQuestionWarning ]];then echo -e "$askQuestionWarning" && printSTD;fi
 			echo -e "${yellow}[Terminal/downloadMC]: Wähle die Server-Version" && printSTD
 			echo -e "${yellow}[Terminal/downloadMC]: Warte auf Eingabe...${norm}"
@@ -310,9 +310,9 @@ downloadMC() {
 	}
 	askServerType() {
 		unset ServerType && while [[ -z $ServerType ]] && [[ -z $stopFunction ]];do
-			clear && printHeader && printSTD && printLastMSG 
-			if ! [[ -z $askQuestionWarning ]];then echo -e "$askQuestionWarning" && printSTD;fi
-			echo -e "${yellow}[Terminal/downloadMC]: Wähle den Server-Typ" && printSTD
+			clear && printFunction printHeader && printFunction printSTD && printFunction printLastMSG 
+			if ! [[ -z $askQuestionWarning ]];then echo -e "$askQuestionWarning" && printFunction printSTD;fi
+			echo -e "${yellow}[Terminal/downloadMC]: Wähle den Server-Typ" && printFunction printSTD
 			echo -e "${yellow}[Terminal/downloadMC]: Warte auf Eingabe..."
 			echo -e "${yellow}-> Paper, Waterfall (bungee from paper)${norm}"
 			read newServerType
@@ -332,8 +332,8 @@ downloadMC() {
 	}
 	askServerName() {
 		unset newMCDir && while [[ -z $newMCDir ]] && [[ -z $stopFunction ]];do
-			clear && printHeader && printSTD && printLastMSG
-			echo -e "${yellow}[Terminal/downloadMC]: Wähle einen Namen für den MC-Server (YourServer, Bungee, etc.)" && printSTD
+			clear && printFunction printHeader && printFunction printSTD && printFunction printLastMSG
+			echo -e "${yellow}[Terminal/downloadMC]: Wähle einen Namen für den MC-Server (YourServer, Bungee, etc.)" && printFunction printSTD
 			echo -e "${yellow}[Terminal/$internCommand]: Warte auf Eingabe...${norm}"
 			read newMCName
 			if [[ -z $newMCName ]];then stopFunction=true && return 1;fi
@@ -359,9 +359,9 @@ downloadMC() {
 		getMCFunction downloadMCjar "$newMCName" "$ServerVersion" "$ServerType"
 		local file="$newMCDir/minecraft_server.jar"
 		if [[ -f $file ]];then
-			lastMsg="${lgreen}[DONE/downloadMC]: ${norm}-> Datei [$file] erstellt!${norm}"
+			lastMsg="${lgreen}[DONE/downloadMC]: ${norm}-> Download für [$newMCName] erfolgreich!\n> Nutze ${lblue}ServerWahl${norm} um den Server auszuwählen..."
 		else
-			lastMsg="${lred}[ERROR/downloadMC]: ${norm}-> Datei [$file] konnte nicht erstellt werdeb!${norm}"
+			lastMsg="${lred}[ERROR/downloadMC]: ${norm}-> Download fehlgeschlagen!${norm}"
 		fi
 		unset askQuestionWarning && return 1
 	done

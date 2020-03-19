@@ -111,6 +111,9 @@ netCommands() {
 			mcConfig)
 				netCommand mcConfig
 			;;
+			downloadMC)
+				clear && netCommand downloadMC
+			;;
 			pingOther)
 				clear && localCommand doPingOther $arg1 $arg2
 			;;

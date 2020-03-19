@@ -8,7 +8,7 @@ fi
 
 runExternScript() {
 	local varIP=$1
-	local script="$2 $3 $4 $5 $6 $7"
+	local script="$2 $3 $4 $5 $6 $7 $8"
 	local chDir='cd $DBTDIR' # <-- This variable will be escaped on the extern server ('...')
 	ssh -q -t  -i $dbtKeyFile -p $stdSSHport root@$varIP "$chDir; ./$script;exit"
 }
@@ -80,7 +80,7 @@ addConnection() {
 			clear
 			echo -e "${yellow}[Info/addConnection]: -> Bitte gib das Passwort (oben) ein!"
 			echo -e ">> Drücke ${lblue}ENTER ${yellow}wenn das Login per SSH vollzogen wurde...${norm}"
-			read doEnter && return 1
+			read doEnter
 		done && unset doEnter
 	}
 	saveSSHEntry() {
@@ -161,4 +161,4 @@ assumeExOrIntern() {
 	fi
 }
 
-$1 $2 $3 $4 $5 $6 $7
+$1 $2 $3 $4 $5 $6 $7 $8

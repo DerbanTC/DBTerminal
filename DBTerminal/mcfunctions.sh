@@ -181,12 +181,19 @@ doEnsureMCStop() {
 	fi
 }
 
+downloadMCcheck() {
+	source ./stdvariables.sh
+	local mcName=$1
+	cd "$mcDir"$mcName/
+	echo -e "$(ls -f | grep -c "minecraft_server.jar.*")"
+}
+
 downloadMCjar() {
 	createDir() {
 		newMCDir=""$mcDir"$1"
 		if [[ -d $newMCDir ]];then
 			cd $newMCDir
-			if ! [[ -z $(ls -f | grep "minecraft_server.jar") ]];then
+			if [[ -f "minecraft_server.jar" ]];then
 				count=$(ls -f | grep -c "minecraft_server.jar_OLD.*")
 				if [[ $count -gt 0 ]];then
 					count=$(( count + 1 ))
@@ -194,6 +201,7 @@ downloadMCjar() {
 				else
 					cp minecraft_server.jar minecraft_server.jar_OLD
 				fi
+				rm minecraft_server.jar
 			fi
 		else
 			mkdir $newMCDir && cd $newMCDir
