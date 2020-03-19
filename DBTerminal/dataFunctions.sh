@@ -108,7 +108,7 @@ setLocalData() {
 		rm $tmpLocalData
 	fi
 	for mcName in $(ls -d $mcDir*/ | cut -f$lastSlash -d '/');do
-		cd $mcDir$mcName/ && jar=$(ls -f | grep -c '[0-9|a-z|A-Z].jar')
+		cd $mcDir$mcName/ && jar=$(ls -f | grep -c '[0-9|a-z|A-Z].jar$')
 		if [[ $jar == 1 ]];then
 			n=$(( n +1 )) && getFunction getSTDFiles
 			getFunction readMCBackupConf && getFunction readProperties

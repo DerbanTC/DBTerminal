@@ -153,10 +153,10 @@ printCMDHeader() {
 	fi
 	echo -e "${yellow}[Terminal] Warte auf Eingabe..."
 	if [[ $netHandler == local ]];then
-		echo -e "-> ServerList, ServerWahl, ServerCheck, pingOther, GetScreen, htop"
+		echo -e "-> ServerList, ServerWahl, ServerCheck, downloadMC, pingOther, GetScreen, htop"
 		echo -e "-> Start, Stop, Restart, SendText, mcConfig, Backup, HotKey${norm}"
 	else
-		echo -e "-> ServerList, ServerWahl, ServerCheck, pingOther, GetScreen, htop, SSH"
+		echo -e "-> ServerList, ServerWahl, ServerCheck, downloadMC, pingOther, GetScreen, htop, SSH"
 		echo -e "-> Start, Stop, Restart, SendText, mcConfig, Backup, HotKey${norm}"
 	fi
 }
@@ -187,6 +187,33 @@ printLocalBackupConf() {
 	local a="Daily-Max,Weekly-Max,Day of Week,Day of Month"
 	local b="$a\n$DailyBackupMax,$WeeklyBackupMax,$WeeklyDay,$MonthlyDay"
 	lastListMsg="$(echo -e "$b" | column -s , -t)" && declare -g "magic_variable_2=$(echo -e "$lastListMsg")"
+}
+
+printAvaibleVersions() {
+	cd "$SelfPath"tmp/
+	case $1 in
+		Paper)
+			pingURL=https://papermc.io/api/v1/paper
+			pingFile="$SelfPath"tmp/ping@paper
+			jsonFile="$SelfPath"tmp/ping@paper.json
+		;;
+		Waterfall)
+			pingURL=https://papermc.io/api/v1/waterfall
+			pingFile="$SelfPath"tmp/ping@waterfall
+			jsonFile="$SelfPath"tmp/ping@waterfall.json
+		;;
+		*)
+			return 1
+		;;
+	esac
+	if ! [[ -f $jsonFile ]] || [[ $(( $(date +%s) - $(date +%s -r $pingFile) )) -ge 10800 ]];then
+		wget -q --content-disposition $pingURL -O $pingFile
+		jq -s . $pingFile > $jsonFile
+	fi
+	avaibleVersions=$(jq -r '.[].versions' $jsonFile | grep -oP "\d.\d+.*[^,\"]" | tr -s "\n" " ")
+	lastListMsg="${yellow}$1-Versionen:" && declare -g "magic_variable_1=$(echo -e "$lastListMsg")"
+	lastListMsg="$avaibleVersions" && declare -g "magic_variable_2=$(echo -e "$lastListMsg")"
+	cd $SelfPath
 }
 
 $1 $2 $3 $4 $5

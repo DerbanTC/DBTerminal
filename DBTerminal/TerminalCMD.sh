@@ -47,6 +47,9 @@ localCommands() {
 			mcConfig)
 				clear && localCommand mcConfig
 			;;
+			downloadMC)
+				clear && localCommand downloadMC
+			;;
 			pingOther)
 				clear && localCommand doPingOther $arg1 $arg2
 			;;
@@ -172,6 +175,9 @@ localCommands() {
 			;;
 			mcConfig)
 				clear && localCommand mcConfig
+			;;
+			downloadMC)
+				clear && localCommand downloadMC
 			;;
 			pingOther)
 				clear && localCommand doPingOther $arg1 $arg2

@@ -10,7 +10,7 @@ getCMDFunction() {
 	source ""$SelfPath"cmdfunctions.sh" $1 $2 $3
 }
 getMCFunction() {
-	source ""$SelfPath"mcfunctions.sh" $1 $2 $3
+	source ""$SelfPath"mcfunctions.sh" $1 $2 $3 $4 $5
 }
 getSSHFunction() {
 	source ""$SelfPath"sshfunctions.sh" "$1" "$2" "$3" "$4" "$5"

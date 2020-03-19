@@ -1,17 +1,13 @@
 #!/bin/bash
 
-ExecuteCommand=$1
-Argument2=$2
-Argument3=$3
-
 getFunction() {
 	source ""$SelfPath"functions.sh" $1 $2 $3 $4
 }
 
 grepExtern() {
 	if ! [[ -z $1 ]];then
-		mcName=$1 && varPath="$(dirname "$(readlink -fn "$0")")/"
-		cd $varPath && source ./stdvariables.sh
+		mcName=$1 && SelfPath="$(dirname "$(readlink -fn "$0")")/"
+		cd $SelfPath && source ./stdvariables.sh
 		getFunction getSTDFiles
 	fi
 }
@@ -52,7 +48,7 @@ readMCPing() {
 	maxPlayersCount=$(jq -r '.[].players.max' $jsonfile)
 	versionString=$(jq -r '.[].version' $jsonfile)
 	softwareString=$(jq -r '.[].software' $jsonfile)
-#	rm $jsonfile && rm $tmpfile
+	rm $jsonfile && rm $tmpfile
 }
 
 getOnlinePlayers() {
@@ -185,6 +181,43 @@ doEnsureMCStop() {
 	fi
 }
 
-#echo -e "mcf runs >> $1 $2 $3 $4 $5"
-$ExecuteCommand $Argument2 $Argument3 $4 $5
+downloadMCjar() {
+	createDir() {
+		newMCDir=""$mcDir"$1"
+		if [[ -d $newMCDir ]];then
+			cd $newMCDir
+			if ! [[ -z $(ls -f | grep "minecraft_server.jar") ]];then
+				count=$(ls -f | grep -c "minecraft_server.jar_OLD.*")
+				if [[ $count -gt 0 ]];then
+					count=$(( count + 1 ))
+					cp minecraft_server.jar "minecraft_server.jar_OLD$count"
+				else
+					cp minecraft_server.jar minecraft_server.jar_OLD
+				fi
+			fi
+		else
+			mkdir $newMCDir && cd $newMCDir
+		fi
+	}
+	downloadJar() {
+		local ServerVersion=$1
+		local ServerType=$2
+		case $ServerType in
+			Paper)
+				local paperURL="https://papermc.io/api/v1/paper/$ServerVersion/latest/download"
+				wget -q --content-disposition $paperURL -O minecraft_server.jar
+			;;
+			Waterfall)
+				local paperURL="https://papermc.io/api/v1/waterfall/$ServerVersion/latest/download"
+				wget -q --content-disposition $paperURL -O minecraft_server.jar
+			;;
+		esac
+		cd $SelfPath
+	}
+	if [[ -z $1 ]] || [[ -z $2 ]] || [[ -z $3 ]];then return 1;fi
+	grepExtern $4
+	createDir $1
+	downloadJar $2 $3
+}
 
+$1 $2 $3 $4 $5

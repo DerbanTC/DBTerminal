@@ -292,6 +292,81 @@ mcConfig() {
 	fi
 }
 
+downloadMC() {
+	askServerVersion() {
+		unset ServerVersion && while [[ -z $ServerVersion ]] && [[ -z $stopFunction ]];do
+			clear && printHeader && printSTD && printFunction printAvaibleVersions $ServerType && printLastMSG
+			if ! [[ -z $askQuestionWarning ]];then echo -e "$askQuestionWarning" && printSTD;fi
+			echo -e "${yellow}[Terminal/downloadMC]: Wähle die Server-Version" && printSTD
+			echo -e "${yellow}[Terminal/downloadMC]: Warte auf Eingabe...${norm}"
+			read newServerVersion
+			if [[ -z $newServerVersion ]];then stopFunction=true && unset askQuestionWarning && return 1;fi
+			if [[ -z $(grep -o "\"$newServerVersion\"" $jsonFile) ]];then
+				lastMsg="> Server version not avaible!"
+			else
+				ServerVersion=$newServerVersion
+			fi
+		done
+	}
+	askServerType() {
+		unset ServerType && while [[ -z $ServerType ]] && [[ -z $stopFunction ]];do
+			clear && printHeader && printSTD && printLastMSG 
+			if ! [[ -z $askQuestionWarning ]];then echo -e "$askQuestionWarning" && printSTD;fi
+			echo -e "${yellow}[Terminal/downloadMC]: Wähle den Server-Typ" && printSTD
+			echo -e "${yellow}[Terminal/downloadMC]: Warte auf Eingabe..."
+			echo -e "${yellow}-> Paper, Waterfall (bungee from paper)${norm}"
+			read newServerType
+			case $newServerType in
+				Paper)
+					ServerType=Paper
+				;;
+				Waterfall)
+					ServerType=Waterfall
+				;;
+				*)
+					if [[ -z $newServerType ]];then stopFunction=true && unset askQuestionWarning && return 1;fi
+					lastMsg="> Sorry, coming soon... actually only paper avaible"
+				;;
+			esac
+		done
+	}
+	askServerName() {
+		unset newMCDir && while [[ -z $newMCDir ]] && [[ -z $stopFunction ]];do
+			clear && printHeader && printSTD && printLastMSG
+			echo -e "${yellow}[Terminal/downloadMC]: Wähle einen Namen für den MC-Server (YourServer, Bungee, etc.)" && printSTD
+			echo -e "${yellow}[Terminal/$internCommand]: Warte auf Eingabe...${norm}"
+			read newMCName
+			if [[ -z $newMCName ]];then stopFunction=true && return 1;fi
+			if [[ $str == *['!'@#\$%^\&*()_+]* ]];then
+				clear && lastMsg="${lred}[ERROR/mcConfig]: ${norm}-> Keine Spezial-Zeichen!"
+			else
+				newMCName=$newMCName
+				newMCDir="$mcDir"$newMCName
+			fi
+		done
+	}
+	unset stopFunction && while [[ -z $stopFunction ]];do
+		askServerName
+		local jarFile=""$newMCDir"/minecraft_server.jar"
+		if [[ -f $jarFile ]];then
+			askQuestionWarning="${lred}> Warnung! ${norm}-> Datei [$jarFile] bereits vorhanden!"
+			askQuestion2 yes no "Weiterfahren?"
+			if ! [[ $askedAnswer == yes ]];then stopFunction=true && return 1;fi
+		fi
+		askServerType
+		askServerVersion
+		if ! [[ -z $stopFunction ]];then return 1;fi
+		getMCFunction downloadMCjar "$newMCName" "$ServerVersion" "$ServerType"
+		local file="$newMCDir/minecraft_server.jar"
+		if [[ -f $file ]];then
+			lastMsg="${lgreen}[DONE/downloadMC]: ${norm}-> Datei [$file] erstellt!${norm}"
+		else
+			lastMsg="${lred}[ERROR/downloadMC]: ${norm}-> Datei [$file] konnte nicht erstellt werdeb!${norm}"
+		fi
+		unset askQuestionWarning && return 1
+	done
+}
+
 ### DBT COMMANDS
 GetScreen() {
 	if [[ -z $mcName ]] || [[ -z $selectedMCSrv ]];then
