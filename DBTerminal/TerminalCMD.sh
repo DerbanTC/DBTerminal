@@ -138,7 +138,7 @@ netCommands() {
 	done
 }
 
-localCommands() {
+unknownCommands() {
 	while [[ -z $netHandler ]];do
 		clear && printCMDHeader && read -a INPUT_STRING -t 14440
 		if [[ $? -gt 128 ]];then 
