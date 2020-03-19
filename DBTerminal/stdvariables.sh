@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Hier den gewünschten Speicherort der Backups eintragen
-backupDir=/home/backup/
+backupDir=/home/dbtbackup/
 
 #Minecraft-Ordner / Verzeichnis mit allen möglichen MC-Servern
 mcDir=/minecraft/
@@ -34,7 +34,7 @@ localData="$dataDir"localdata
 localConf="$dataDir"localconf
 netConf="$dataDir"netconf
 backupConf="$dataDir"backupconf
-netHandler=majority
+netHandler=
 NetworkServer=$(grep NetworkServer= $dataFile 2>/dev/null | cut -f2 -d'=')
 BackupServer=$(grep BackupServer= $dataFile 2>/dev/null | cut -f2 -d'=')
 stdSSHport=22
