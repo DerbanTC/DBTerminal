@@ -10,7 +10,6 @@ Terminal() {
 	tmux split-window -v -p 50 -t Terminal
 	tmux split-window -h -p 50 -t Terminal
 	echo -e "[INFO]: TMUX-Session [TerminalCMD] wurde initialisiert!"
-	tmux send-key -t Terminal:0.1 "screen -r TerminalCMD" C-m
 	getFunction reboundTerminal
 }
 
@@ -20,29 +19,26 @@ echo "[Timestamp]: Date:[$date] Time:[$time]"
 echo "[INFO]: Search files and check conditions..."
 actDate=$date
 
-if [[ -z $(pgrep -c tmux) ]];then
+if [[ $(pgrep -c "tmux") == 0 ]];then
     tmux start-server
     echo "[REBOUND.SH]: TMUX wurde gestartet!"
 fi
 
 while true; do
-
-	if ! $(screen -ls | grep -q TerminalCMD);then
+	if [[ -z $(screen -ls | grep -o "TerminalCMD") ]];then
 		echo -e "[INFO]: SCREEN [TerminalCMD] nicht gefunden. Starte deamon..."
-		screen -dmS "TerminalCMD" bash -c "./TerminalCMD.sh"
-		if $(tmux ls | grep -q Terminal);then
-			tmux send-key -t Terminal:0.1 "screen -r TerminalCMD" C-m
-		fi
+		screen -dmS "TerminalCMD" "./TerminalCMD.sh"
 	fi
-
-	if ! $(tmux ls | grep -q Terminal);then
+	if [[ -z $(tmux ls | grep -o "Terminal") ]];then
 		echo -e "[INFO]: TMUX-Session [TerminalCMD] wurde nicht gefunden! Initialisiere TMUX..."
 		Terminal
 	elif [[ $(tmux ls | grep -q Terminal | tmux display-message -p '#{window_panes}') != 3 ]];then
 		echo -e "[INFO]: TMUX-Session [TerminalCMD] hat nicht 3 Panes! Initialisiere neu..."
 		tmux kill-session -t Terminal && Terminal
 	fi
-
+	if [[ -z $(screen -ls | grep "TerminalCMD" | grep "Attached") ]];then
+		tmux send-key -t Terminal:0.1 "screen -r TerminalCMD" C-m
+	fi
 	countSlashes=$(echo $mcDir | grep -o "/" | wc -l)
 	lastSlash=$(( countSlashes +1 ))
 	for mcName in $(ls -d $mcDir*/ | cut -f$lastSlash -d'/');do
@@ -58,5 +54,4 @@ while true; do
 		fi
 	done
 	sleep 5
-
 done
