@@ -75,7 +75,8 @@ checkConnection() {
 addConnection() {
 	addSSHConnection() {
 		getFunction changeTerminal TMUX00
-		tmux send-key -t Terminal:0.0 "cd $DBTDIR && ./sshfunctions.sh copyPubKey $addIP" C-m &
+		tmux send-key -t Terminal:0.0 "cd \$DBTDIR && ./sshfunctions.sh copyPubKey $addIP" C-m &
+		tmux send-key -t Terminal:0.0 "echo SelfPath is $SelfPath or $DBTDIR" C-m &
 		while true;do
 			clear
 			echo -e "${yellow}[Info/addConnection]: -> Bitte gib das Passwort (oben) ein!"
