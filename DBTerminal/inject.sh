@@ -6,9 +6,6 @@ printFunction() {
 getFunction() {
 	source ""$SelfPath"functions.sh" $1 $2 $3
 }
-getCMDFunction() {
-	source ""$SelfPath"cmdfunctions.sh" $1 $2 $3
-}
 getMCFunction() {
 	source ""$SelfPath"mcfunctions.sh" $1 $2 $3 $4 $5
 }

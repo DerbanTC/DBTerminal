@@ -118,8 +118,8 @@ fixScreenrc() {
 
 chmodExe() {
 	local gitUrl=https://raw.githubusercontent.com/DerbanTC/DBTerminal/master/DBTerminal/
-	local DBTScripts=backup.sh,cmdfunctions.sh,dataFunctions.sh,functions.sh,inject.sh,localCommands.sh,login.sh,mcfunctions.sh
-	local DBTScripts=$DBTScripts,netCommands.sh,printFunctions.sh,printHelp.sh,reboundloop.sh,stdvariables.sh,TerminalCMD.sh
+	local DBTScripts=backup.sh,dataFunctions.sh,fixResources.sh,functions.sh,inject.sh,localCommands.sh,login.sh,mcfunctions.sh
+	local DBTScripts=$DBTScripts,netCommands.sh,printFunctions.sh,printHelp.sh,reboundloop.sh,sshfunctions.sh,stdvariables.sh,TerminalCMD.sh
 	IFS=, read -a DBTScriptsArray <<< "$DBTScripts"
 	for varScript in "${DBTScriptsArray[@]}";do
 		if [[ -f $varScript ]];then
