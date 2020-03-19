@@ -80,7 +80,7 @@ addConnection() {
 			clear
 			echo -e "${yellow}[Info/addConnection]: -> Bitte gib das Passwort (oben) ein!"
 			echo -e ">> Drücke ${lblue}ENTER ${yellow}wenn das Login per SSH vollzogen wurde...${norm}"
-			read doEnter
+			read doEnter && return 1
 		done && unset doEnter
 	}
 	saveSSHEntry() {
