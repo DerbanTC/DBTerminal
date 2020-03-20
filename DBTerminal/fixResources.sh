@@ -14,6 +14,7 @@ installCronJob() {
 	local CRON_FILE=/var/spool/cron/crontabs/root
 	local cronJob="@reboot screen -dmS \"ReboundLoop\" /bin/bash -c \""$SelfPath"reboundloop.sh\" &"
 	restartCRON() {
+		update-rc.d cron defaults
 		systemctl enable cron.service
 		systemctl start cron.service
 		systemctl stop cron.service
