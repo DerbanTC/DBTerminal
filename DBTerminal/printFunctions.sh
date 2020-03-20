@@ -64,13 +64,19 @@ print3Colon() {
 printHeader() {
 	selectedMCSrv=$(grep -o 'ChoosedMCServer=[^"]*' $dbtData | cut -f2 -d'=' 2>/dev/null)
 	if [[ $netHandler == majority ]];then
-		dataFunction readNetData $selectedMCSrv
+		if ! [[ -z $selectedMCSrv ]];then
+			dataFunction readNetData $selectedMCSrv
+		fi
 		local header="${yellow}***${green}DBT [NETWORK]${yellow}***"
 	elif [[ $netHandler == local ]];then
-		dataFunction readLocalData $selectedMCSrv
+		if ! [[ -z $selectedMCSrv ]];then
+			dataFunction readLocalData $selectedMCSrv
+		fi
 		local header="${yellow}***${green}DBT [LOKAL]${yellow}***"
 	else
-		dataFunction readLocalData $selectedMCSrv
+		if ! [[ -z $selectedMCSrv ]];then
+			dataFunction readLocalData $selectedMCSrv
+		fi
 		local header="${yellow}***${green}DBT${yellow}***"
 	fi
 	getFunction getSTDFiles
