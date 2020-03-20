@@ -12,7 +12,7 @@ cleanFile() {
 
 installCronJob() {
 	local CRON_FILE=/var/spool/cron/crontabs/root
-	local cronJob="@reboot sleep 3 && screen -dmS \"ReboundLoop\" bash -c "$SelfPath"reboundloop.sh"
+	local cronJob="@reboot screen -dmS \"ReboundLoop\" /bin/bash -c \""$SelfPath"reboundloop.sh\""
 	rmAllJobs() {
 		sed -i "s/$searchJob.*//g" $CRON_FILE
 		cleanFile $CRON_FILE
@@ -22,7 +22,7 @@ installCronJob() {
 		cleanFile $CRON_FILE
 	}
 	if [[ -f $CRON_FILE ]];then
-		local searchJob="@reboot screen -dmS \"ReboundLoop\" bash -c.*"
+		local searchJob="@reboot screen -dmS \"ReboundLoop\" \/bin\/bash -c.*"
 		local cronExist=$(grep -o "$cronJob" $CRON_FILE 2>/dev/null)
 		local cronCount=$(grep -c "$searchJob" $CRON_FILE 2>/dev/null)
 		if [[ -z $cronExist ]] || [[ $(grep -c "@reboot screen -dmS \"ReboundLoop\".*" $CRON_FILE 2>/dev/null) -gt 1 ]];then
