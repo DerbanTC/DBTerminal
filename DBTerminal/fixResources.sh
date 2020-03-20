@@ -13,6 +13,12 @@ cleanFile() {
 installCronJob() {
 	local CRON_FILE=/var/spool/cron/crontabs/root
 	local cronJob="@reboot screen -dmS \"ReboundLoop\" /bin/bash -c \""$SelfPath"reboundloop.sh\" &"
+	restartCRON() {
+		systemctl enable cron.service
+		systemctl start cron.service
+		systemctl stop cron.service
+		systemctl restart cron.service
+	}
 	rmAllJobs() {
 		sed -i "s/$searchJob.*//g" $CRON_FILE
 		cleanFile $CRON_FILE
@@ -29,9 +35,11 @@ installCronJob() {
 			rmAllJobs
 			addNewJob
 			cleanFile $CRON_FILE
+			restartCRON
 		fi
 	else
 		echo -e "$cronJob" >> $CRON_FILE
+		restartCRON
 	fi
 }
 
