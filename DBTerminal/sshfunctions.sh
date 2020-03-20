@@ -101,6 +101,7 @@ addConnection() {
 			setSyncData &
 			if [[ -z $netHandler ]];then
 				setHandler majority
+				netHandler=majority
 				lastListMsg="${lgreen}[INFO]: ${norm}-> DBT-Modus von Lokal zu Netzwerk gewechselt!" 
 				declare -g "magic_variable_1=$(echo -e "$lastListMsg")"
 			fi	
