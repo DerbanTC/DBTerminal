@@ -70,6 +70,7 @@ localCommands() {
 				fi
 			;;
 		esac
+		source ./stdvariables.sh
 	done
 }
 
@@ -138,6 +139,7 @@ netCommands() {
 				fi
 			;;
 		esac
+		source ./stdvariables.sh
 	done
 }
 
@@ -205,6 +207,7 @@ unknownCommands() {
 				fi
 			;;
 		esac
+		source ./stdvariables.sh
 	done
 }
 
