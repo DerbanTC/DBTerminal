@@ -15,10 +15,12 @@ knownNetHandler="$(grep NetworkServer= $dbtData 2>/dev/null | cut -f2 -d=)"
 checkOrigin() {
 	User_IP=$(who am i | grep -o "(.*)" | sed "s/[()]//g")
 	User_Name=$(whoami)
+	if ! [[ -z $(echo $User_IP | grep "tmux.*") ]];then
+		User_Name=tmux && return 1
+	fi
 	if [[ -f $dbtData ]];then	
 		if [[ $knownNetHandler == $User_IP ]];then
 			connectionType=viaNetHandler
-			connectLog="via NetHandler \"$knownNetHandler\""
 			local sshPort=$(echo $SSH_CLIENT | cut -f3 -d' ')
 			User_IP=$(netstat -tapen | grep root@no | sed "s/.*$(hostname -i):$sshPort//g" | cut -f1 -d:)
 		fi
@@ -34,18 +36,18 @@ checkConnectingMethod() {
 	fi
 	if ! [[ -z $(tail -10 "/var/log/auth.log" | grep "$(who am i | grep -o "(.*)" | sed "s/[()]//g")" | grep Accepted | grep publickey) ]];then
 		sed -i "s/lastlogged_with=.*/lastlogged_with=publickey/g" $loginLog
-	else
+	elif ! [[ -z $(tail -10 "/var/log/auth.log" | grep "$(who am i | grep -o "(.*)" | sed "s/[()]//g")" | grep Accepted | grep password) ]];then
 		sed -i "s/lastlogged_with=.*/lastlogged_with=password/g" $loginLog
 	fi
 }
 
 logLogin() {
-	lastDay=$(tac $loginLog | grep -oEm 1 "^Date 2[0-1][0-9][0-9]-[0-1][0-9]-[0-3][0-9]:$" | sed "s/Date //g" | sed "s/://g")
-	actDate="$( date +"%Y-%m-%d" )"
+	local lastDay=$(tac $loginLog | grep -oEm 1 "^>> Date 2[0-1][0-9][0-9]-[0-1][0-9]-[0-3][0-9]:$" | sed "s/Date //g" | sed "s/://g")
+	local actDate="$( date +"%Y-%m-%d" )"
 	if [[ -z $lastDay ]];then
-		echo -e "Date $actDate:" >> $loginLog
+		echo -e ">> Date $actDate:" >> $loginLog
 	elif ! [[ $lastDay == $actDate ]];then
-		echo -e "Date $actDate:" >> $loginLog
+		echo -e ">> Date $actDate:" >> $loginLog
 	fi
 	if [[ $connectionType == viaNetHandler ]];then
 		echo -e "[$( date +"%T" )] [DBT_Login]: User \"$User_Name\" with IP \"$User_IP\" connected via NetHandler \"$knownNetHandler\"" >> $loginLog
@@ -97,7 +99,9 @@ printLoginHeader() {
 
 checkOrigin
 checkConnectingMethod
-logLogin
+if ! [[ $User_Name == tmux ]];then
+	logLogin &
+fi
 
 if [[ $connectionType == viaNetHandler ]];then
 	echo -e "> ${lred}WARNING: ${yellow}You are connected from the DBT-NetHandler!"
