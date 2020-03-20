@@ -84,7 +84,7 @@ printLoginHeader() {
 		IFS=''
 		read -s -N 1 -t 5 answer || answer=timeout
 		case $answer in
-			$'\x0a' |timeout) echo -e "\n " && tmux a -t Terminal;;
+			$'\x0a' |timeout) echo -e "\n " && tmux a -t Terminal:0.1;;
 			* ) echo -e "${yellow}> Abgrebrochen! Tippe ${lblue}tmux a -t Terminal${yellow} um dich mit DBT zu verbinden${norm}";;
 		esac
 	}
