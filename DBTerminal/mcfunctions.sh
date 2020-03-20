@@ -13,7 +13,7 @@ grepExtern() {
 }
 
 doMCPing() {
-	tmpfile="$SelfPath"tmpfile
+	tmpfile="$SelfPath"tmp/mcping
 	varIP=$1 && varPort=$2
 	if [[ -z $varIP ]] || [[ $varIP == $MCport ]] && ! [[ -z $varPort ]];then
 		lastMsg="${lred}[ERROR/doMCPing]: ${norm}-> Keine IP als [varIP]! -> $varIP"
@@ -35,9 +35,9 @@ doMCPing() {
 
 readMCPing() {
 	unset pingAllowdString && unset onlinePlayersCount
-	jsonfile="$SelfPath"tmpfile.json
-	tmpfile="$SelfPath"tmpfile
-	jq -s . tmpfile > tmpfile.json
+	jsonfile="$SelfPath"tmp/mcping.json
+	tmpfile="$SelfPath"tmp/mcping
+	jq -s . $tmpfile > $jsonfile
 	pingAllowdString=$(jq -r '.[].error' $jsonfile)
 	if [[ $pingAllowdString != null ]];then
 		lastMsg="[INFO/doMCPing]: -> Ping ist nicht erlaubt! Böse böse Admins..."

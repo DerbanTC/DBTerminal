@@ -11,7 +11,7 @@ getBackupFunction updateCronJob &
 
 localCommands() {
 	while [[ $netHandler == local ]];do
-		clear && printCMDHeader && read -a INPUT_STRING -t 14440
+		printCMDHeader && read -a INPUT_STRING -t 14440
 		if [[ $? -gt 128 ]];then 
 			lastMsg="${lgreen}[INFO]: ${yellow}-> Last update at [$( date +"%T" )] (auto-sync after 8h)"
 			setLocalData
@@ -76,7 +76,7 @@ localCommands() {
 
 netCommands() {
 	while [[ $netHandler == majority ]];do
-		clear && printCMDHeader && read -a INPUT_STRING -t 14440
+		printCMDHeader && read -a INPUT_STRING -t 14440
 		if [[ $? -gt 128 ]];then 
 			lastMsg="${lgreen}[INFO]: ${yellow}-> Last Net-Sync at [$( date +"%T" )] (auto-sync after 8h)"
 			setNetData
@@ -145,7 +145,7 @@ netCommands() {
 
 unknownCommands() {
 	while [[ -z $netHandler ]];do
-		clear && printCMDHeader && read -a INPUT_STRING -t 14440
+		printCMDHeader && read -a INPUT_STRING -t 14440
 		if [[ $? -gt 128 ]];then 
 			lastMsg="${lgreen}[INFO]: ${yellow}-> Last update at [$( date +"%T" )] (auto-sync after 8h)"
 			setLocalData

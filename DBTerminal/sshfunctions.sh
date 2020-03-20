@@ -10,7 +10,7 @@ runExternScript() {
 	local varIP=$1
 	local script="$2 $3 $4 $5 $6 $7 $8"
 	local chDir='cd $DBTDIR' # <-- This variable will be escaped on the extern server ('...')
-	ssh -q -t  -i $dbtKeyFile -p $stdSSHport root@$varIP "$chDir; ./$script;exit"
+	ssh -q -t -i $dbtKeyFile -p $stdSSHport root@$varIP "$chDir; ./$script;exit"
 }
 
 listExternScreens() {

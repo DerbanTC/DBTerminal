@@ -159,8 +159,8 @@ readLocalData() {
 
 copyLocalDataSSH() {
 	varIP=$1
-	varDBTDir=$(ssh -i $dbtKeyFile -p $stdSSHport root@$varIP ps -aux | grep "SCREEN -dmS ReboundLoop bash" | cut -f 3 -d '-' | cut -f 2 -d ' ' | sed s/reboundloop.sh//g)
-	varLocalData="$varDBTDir"data/localdata
+	readSyncData $varIP
+	varLocalData="$varDBTDir"/data/localdata
 	counttmp=$(ls -f | grep -c tmp$)
 	touch "$dataDir"localDatatmp$counttmp
 	scp -q -i $dbtKeyFile -P $stdSSHport root@$varIP:$varLocalData $tempDir
@@ -176,9 +176,11 @@ copyLocalDataSSH() {
 # On a local installation it's only a copy from the localdata
 #############################################################################
 setNetData() {
-	bufferIP=$(sed "${selectedMCSrv}q;d" $netData | sed s/' '//g | cut -f1,2 -d',')
+	if [[ -f $netData ]];then
+		bufferIP=$(sed "${selectedMCSrv}q;d" $netData | sed s/' '//g | cut -f1,2 -d',')
+		rm $netData
+	fi
 	setLocalData
-	if [[ -f $netData ]];then rm $netData;fi
 	while IFS= read -r line; do
 		echo $line >> $netData
 	done < $localData
@@ -189,13 +191,15 @@ setNetData() {
 			copyLocalDataSSH $externMCServer
 		fi
 	done
-	newIP=$(sed "${selectedMCSrv}q;d" $netData | sed s/' '//g | cut -f1,2 -d',')
-	if ! [[ $bufferIP == $newIP ]];then
-		newSel=$(grep -n "$bufferIP" $netData |  cut -f1 -d':')
-		if [[ -z $newSel ]];then
-			setDBTData MCServer
-		else
-			setDBTData MCServer $newSel
+	if [[ -f $netData ]];then
+		newIP=$(sed "${selectedMCSrv}q;d" $netData | sed s/' '//g | cut -f1,2 -d',')
+		if ! [[ $bufferIP == $newIP ]];then
+			newSel=$(grep -n "$bufferIP" $netData |  cut -f1 -d':')
+			if [[ -z $newSel ]];then
+				setDBTData MCServer
+			else
+				setDBTData MCServer $newSel
+			fi
 		fi
 	fi
 }
@@ -240,7 +244,7 @@ readNetData() { #read specific entry from netdata
 	if ! [[ -f $netData ]];then
 		setNetData
 	fi
-	if ! [[ -z $1 ]];then
+	if ! [[ -z $1 ]] && [[ -f $netData ]];then
 		nr=$1 && oIFS="$IFS"
 		unset fullEntry && fullEntry=$(sed "${nr}q;d" "${netData}" | sed s/' '//g)
 		for varEntry in `echo $fullEntry`; do
