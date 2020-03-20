@@ -160,6 +160,7 @@ readLocalData() {
 copyLocalDataSSH() {
 	varIP=$1
 	readSyncData $varIP
+	if [[ -z $varDBTDir ]];then return 1;fi
 	varLocalData="$varDBTDir"/data/localdata
 	counttmp=$(ls -f | grep -c tmp$)
 	touch "$dataDir"localDatatmp$counttmp
@@ -332,6 +333,9 @@ setTempSyncData() {
 }
 
 readSyncData() {
+	if ! [[ -f $syncData ]];then
+		setSyncData
+	fi
 	local varIP=$1
 	local syncEntry=$(grep "$varIP" $syncData | cut -f2 -d=)
 	varDBTDir=$(echo $syncEntry | cut -f1 -d,)
@@ -531,6 +535,8 @@ setHandler() {
 		sed -i s/^netHandler=.*/netHandler=$1/g stdvariables.sh
 	elif [[ $1 == local ]];then
 		sed -i s/^netHandler=.*/netHandler=$1/g stdvariables.sh
+	elif [[ $1 == empty ]];then
+		sed -i s/^netHandler=.*/netHandler=/g stdvariables.sh
 	fi
 }
 

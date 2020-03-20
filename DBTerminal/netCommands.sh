@@ -11,6 +11,10 @@ ServerList() {
 	if [[ $countOfExternServer -gt 0 ]] && [[ -z $1 ]];then
 		clear && echo -e "${yellow}[Terminal]: -> Prüfe Netwerk...${norm}"
 		dataFunction setNetData
+	elif [[ $countOfExternServer == 0 ]];then
+		dataFunction setHandler empty
+		lastMsg="${lred}Warnung ${norm}-> Keine Einträge für externe Server vorhanden!\n> Wurden die Daten gelöscht?"
+		return 1
 	fi
 	echo -e "Nr.@Name@Status@IP:Port@Backup@Location" > $tmpNet
 	while IFS= read -a line;do
