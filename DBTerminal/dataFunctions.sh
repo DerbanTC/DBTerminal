@@ -177,7 +177,8 @@ copyLocalDataSSH() {
 #############################################################################
 setNetData() {
 	bufferIP=$(sed "${selectedMCSrv}q;d" $netData | sed s/' '//g | cut -f1,2 -d',')
-	setLocalData && rm $netData
+	setLocalData
+	if [[ -f $netData ]];then rm $netData;fi
 	while IFS= read -r line; do
 		echo $line >> $netData
 	done < $localData
@@ -239,33 +240,34 @@ readNetData() { #read specific entry from netdata
 	if ! [[ -f $netData ]];then
 		setNetData
 	fi
-	nr=$1 && oIFS="$IFS"
-	unset fullEntry && fullEntry=$(sed "${nr}q;d" "${netData}" | sed s/' '//g)
-	for varEntry in `echo $fullEntry`; do
-		IFS=',' && arr=($varEntry)
-		physisIP=${arr[0]} && mcName=${arr[1]}
-		notedIP=$(echo ${arr[2]}  | cut -f2 -d'=')
-		notedPort=$(echo ${arr[3]}  | cut -f2 -d'=')
-		isRunning=$(echo ${arr[4]}  | cut -f2 -d'=')
-		if [[ $isRunning == false ]];then
-			mcRunStateCode="${lred}\U274E"
-		elif [[ -z $notedIP ]] || [[ -z $notedPort ]];then
-			mcRunStateCode="${lred}\U2753"
-		elif [[ $isRunning == true ]];then
-			mcRunStateCode="${green}\U2705"
-#			mcRunStateCode="${green}\U2714"
-		else
-			mcRunStateCode="${lred}\U2755"
-		fi
-		doBackup=$(echo ${arr[5]}  | cut -f2 -d'=')
-		doBackupTime=$(echo ${arr[6]})
-		if [[ $internalIP == $physisIP ]];then
-			location=intern
-		else
-			location=extern
-		fi
-	done
-	IFS="$oIFS"
+	if ! [[ -z $1 ]];then
+		nr=$1 && oIFS="$IFS"
+		unset fullEntry && fullEntry=$(sed "${nr}q;d" "${netData}" | sed s/' '//g)
+		for varEntry in `echo $fullEntry`; do
+			IFS=',' && arr=($varEntry)
+			physisIP=${arr[0]} && mcName=${arr[1]}
+			notedIP=$(echo ${arr[2]}  | cut -f2 -d'=')
+			notedPort=$(echo ${arr[3]}  | cut -f2 -d'=')
+			isRunning=$(echo ${arr[4]}  | cut -f2 -d'=')
+			if [[ $isRunning == false ]];then
+				mcRunStateCode="${lred}\U274E"
+			elif [[ -z $notedIP ]] || [[ -z $notedPort ]];then
+				mcRunStateCode="${lred}\U2753"
+			elif [[ $isRunning == true ]];then
+				mcRunStateCode="${green}\U2705"
+			else
+				mcRunStateCode="${lred}\U2755"
+			fi
+			doBackup=$(echo ${arr[5]}  | cut -f2 -d'=')
+			doBackupTime=$(echo ${arr[6]})
+			if [[ $internalIP == $physisIP ]];then
+				location=intern
+			else
+				location=extern
+			fi
+		done
+		IFS="$oIFS"
+	fi
 }
 
 ##### SYNCDATA ########################################################################
@@ -512,7 +514,6 @@ setLocalConf() {
 			sed -i "s/$internalIP,(.*)[0-9][0-9]:[0-9][0-9]$/$internalIP,\1$newTime/g" $localConf
 		;;
 	esac
-	#	sed "s/^$internalIP,$mcName o[ff|n],.*/$internalIP,$mcName /g" $localConf
 }
 
 readLocalConf() {
