@@ -270,13 +270,16 @@ readNetData() { #read specific entry from netdata
 
 ##### SYNCDATA ########################################################################
 setSyncData() {
-	source ./stdvariables.sh
-	rm $syncData 2>/dev/null && touch $syncData || touch $syncData
+	if [[ -f $syncData ]];then
+		rm $syncData 2>/dev/null && touch $syncData
+	else
+		touch $syncData
+	fi
 	for externMCServer in $(grep MCServer[0-9]= $dataFile | cut -f 2 -d '=');do
 		getSSHFunction checkConnection $externMCServer
 		if [[ $connected == true ]];then
-			varDBTDir=$(ssh -i $dbtKeyFile -p $stdSSHport root@$varIP ps -aux | grep "SCREEN -dmS ReboundLoop bash" | cut -f 3 -d '-' | cut -f 2 -d ' ' | sed s/reboundloop.sh//g)
-			VarTmpsyncdata="$varDBTDir"tmp/tmpsyncdata
+			varDBTDir="$(ssh -i $dbtKeyFile -p $stdSSHport root@$externMCServer 'echo $DBTDIR')"
+			VarTmpsyncdata=""$varDBTDir"/tmp/tmpsyncdata"
 			getSSHFunction runExternScript $externMCServer dataFunctions.sh setTempSyncData
 			scp -q -i $dbtKeyFile -P $stdSSHport root@$externMCServer:$VarTmpsyncdata $tempDir
 			getSSHFunction runExternScript $externMCServer dataFunctions.sh setTempSyncData delete
