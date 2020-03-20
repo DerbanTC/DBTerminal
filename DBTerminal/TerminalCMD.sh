@@ -6,7 +6,7 @@ source ./inject.sh
 dataFunction readDBTData
 source ./printFunctions.sh
 
-tmux send-key -t Terminal:0.2 "clear" C-m &
+tmux send-key -t Terminal:0.2 C-m && tmux send-key -t Terminal:0.2 "clear" C-m &
 getBackupFunction updateCronJob &
 
 localCommands() {
