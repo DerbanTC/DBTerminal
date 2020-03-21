@@ -160,10 +160,10 @@ printCMDHeader() {
 	echo -e "${yellow}[Terminal] Warte auf Eingabe..."
 	if [[ $netHandler == local ]];then
 		echo -e "-> ServerList, ServerWahl, ServerCheck, downloadMC, pingOther, GetScreen, htop"
-		echo -e "-> Start, Stop, Restart, SendText, mcConfig, Backup, HotKey${norm}"
+		echo -e "-> Start, Stop, Restart, SendText, mcConfig, Backup, HotKey, updateDBT${norm}"
 	else
 		echo -e "-> ServerList, ServerWahl, ServerCheck, downloadMC, pingOther, GetScreen, htop, SSH"
-		echo -e "-> Start, Stop, Restart, SendText, mcConfig, Backup, HotKey${norm}"
+		echo -e "-> Start, Stop, Restart, SendText, mcConfig, Backup, HotKey, updateDBT${norm}"
 	fi
 }
 

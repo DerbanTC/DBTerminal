@@ -68,8 +68,8 @@ downloadDBTScripts() {
 		exit 1
 	fi
 	cd $DBTDir
-	DBTScripts=backup.sh,dataFunctions.sh,fixResources.sh,functions.sh,inject.sh,localCommands.sh,login.sh,mcfunctions.sh
-	DBTScripts=$DBTScripts,netCommands.sh,printFunctions.sh,printHelp.sh,reboundloop.sh,sshfunctions.sh,stdvariables.sh,TerminalCMD.sh
+	DBTScripts=backup.sh,dataFunctions.sh,fixResources.sh,functions.sh,inject.sh,localCommands.sh,login.sh,mcfunctions.sh,netCommands.sh
+	DBTScripts=$DBTScripts,printFunctions.sh,printHelp.sh,reboundloop.sh,sshfunctions.sh,stdvariables.sh,TerminalCMD.sh,update.sh
 	IFS=, read -a DBTScriptsArray <<< "$DBTScripts"
 	for varScript in "${DBTScriptsArray[@]}";do
 		if [[ -f $varScript ]];then

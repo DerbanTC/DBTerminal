@@ -62,6 +62,9 @@ localCommands() {
 			HotKey)
 				printHelp printBindKeyINFO
 			;;
+			updateDBT)
+				localCommand updateDBT
+			;;
 			*)
 				if [ -z $INPUT_STRING ];then
 					clear
@@ -129,6 +132,9 @@ netCommands() {
 			;;
 			HotKey)
 				printHelp printBindKeyINFO
+			;;
+			updateDBT)
+				localCommand updateDBT
 			;;
 			*)
 				if [ -z $INPUT_STRING ];then
@@ -198,6 +204,9 @@ unknownCommands() {
 			;;
 			HotKey)
 				printHelp printBindKeyINFO
+			;;
+			updateDBT)
+				localCommand updateDBT
 			;;
 			*)
 				if [ -z $INPUT_STRING ];then

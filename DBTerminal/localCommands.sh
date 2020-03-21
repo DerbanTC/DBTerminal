@@ -559,4 +559,24 @@ BackupCommands() {
 	done
 }
 
+updateDBT() {
+	clear && echo -e "${yellow}-> Prüfe Updates..."
+	updateFunction checkUpdates
+	if [[ $doUpdate == false ]];then
+		lastMsg="${lgreen}[INFO/update]: ${norm}-> Kein Update verfügbar..." && return 1
+	elif [[ -z $doUpdate ]];then
+		lastMsg="${lred}[ERROR/update]: ${norm}-> Überprüfung fehlgeschlagen!" && return 1
+	else
+		lastMsg="${lgreen}[INFO/update]: ${norm}-> Update verfügbar! Neuste Version: [$newVersion]"
+		clear && printFunction printHeader && printFunction printSTD && printFunction printLastMSG
+		echo -e "${lred}WARNUNG! ${norm}-> Bitte stoppe zuvor alle MCServer!"
+		echo -e "${yellow}Frage: Update ausführen?"
+		echo -e "Warte auf Eingabe..."
+		echo -e "-> yes, no${norm}"
+		read USER_INPUT
+		if ! [[ $USER_INPUT == yes ]];then return 1;fi
+		updateFunction doUpdateDBT
+	fi
+}
+
 $1 $2 $3 $4 $5

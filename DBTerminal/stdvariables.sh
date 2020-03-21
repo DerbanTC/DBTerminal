@@ -15,6 +15,7 @@ stdMCPort=25552
 ##################################
 # DO NOT EDIT!
 
+dbtVersion=1.0
 mcSrvCheckAPI=https://api.mcsrvstat.us/2/
 internalIP=$(hostname -i)
 StartShellName=start.sh
