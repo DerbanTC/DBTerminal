@@ -13,19 +13,31 @@ grepExtern() {
 ### STD COMMANDS
 ServerList() {
 	dataFunction readDBTData && dataFunction setLocalData
-	n=0 && while IFS= read -a line; do
-		n=$(( n + 1 ))
-		dataFunction readLocalData $n
+	listMsgHeader="${yellow}Server-Liste:${norm}"
+	local varList="Nr.@Name@Status@IP:Port@Backup@Location" 
+	unset x && while IFS= read -a line;do
+		local x=$(( x + 1 )) || x=1
+		dataFunction readLocalData $x
+		local header="${lblue}[$x] ${norm}>> ${lblue}[$mcName]"
 		if [[ -z $notedIP ]];then
-			lastListMsg="${lblue}[$n] ${norm}>> ${lblue}[$mcName] ${red}nicht installiert${norm}"
+			local status="${red}n. installiert${norm}" && local ip="..." && local doBackup="..."
 		elif [[ $isRunning == false ]];then
-			lastListMsg="${lblue}[$n] ${norm}>> ${lblue}[$mcName] ${lred}inaktiv${norm}\n$(addSpace 5)>> [$notedIP:$notedPort] [Autobackup=$doBackup]"
+			local status="inaktiv"
+			local ip="$notedIP:$notedPort"
 		else
-			lastListMsg="${lblue}[$n] ${norm}>> ${lblue}[$mcName] ${lgreen}aktiv\n$(addSpace 5)>> ${norm}[$notedIP:$notedPort] [Autobackup=$doBackup]"
+			local status="aktiv"
+			local ip="$notedIP:$notedPort"
 		fi
-		declare -g "magic_variable_$n=$(echo -e "$lastListMsg")"
+		local varList="$varList\n[$x]@$mcName@$(chColor "$status")@"$ip"@$(chColor "$doBackup")@"$location""
 	done < "$localData"
-	unset lastListMsg && listMsgHeader="${yellow}Server-Liste:${norm}"
+	if [[ -z $x ]];then
+		local varList="> no server noted!"
+		lastListMsg="$varList"
+		declare -g "magic_variable_1=$(echo -e "$lastListMsg")"
+	else
+		lastListMsg=$(echo -e "$varList" | column -s @ -t)
+		declare -g "magic_variable_1=$(echo -e "$lastListMsg")"
+	fi
 }
 
 ServerWahl() {

@@ -6,7 +6,6 @@ Argument3=$3
 
 ### STD COMMANDS
 ServerList() {
-	local tmpNet="$tmpDir"tmpnet && local x=0
 	dataFunction readDBTData
 	if [[ $countOfExternServer -gt 0 ]] && [[ -z $1 ]];then
 		clear && echo -e "${yellow}[Terminal]: -> Prüfe Netwerk...${norm}"
@@ -16,9 +15,10 @@ ServerList() {
 		lastMsg="${lred}Warnung ${norm}-> Keine Einträge für externe Server vorhanden!\n> Wurden die Daten gelöscht?"
 		return 1
 	fi
-	echo -e "Nr.@Name@Status@IP:Port@Backup@Location" > $tmpNet
-	while IFS= read -a line;do
-		local x=$(( x + 1 ))
+	listMsgHeader="${yellow}Server-Liste:${norm}"
+	varList="Nr.@Name@Status@IP:Port@Backup@Location" 
+	unset x && while IFS= read -a line;do
+		local x=$(( x + 1 )) || x=1
 		dataFunction readNetData $x
 		local header="${lblue}[$x] ${norm}>> ${lblue}[$mcName]"
 		if [[ -z $notedIP ]];then
@@ -30,10 +30,16 @@ ServerList() {
 			local status="aktiv"
 			local ip="$notedIP:$notedPort"
 		fi
-		echo -e "[$x]@$mcName@$(chColor "$status")@"$ip"@$(chColor "$doBackup")@"$location"" >> $tmpNet
+		varList="$varList\n[$x]@$mcName@$(chColor "$status")@"$ip"@$(chColor "$doBackup")@"$location""
 	done < "$netData"
-	listMsgHeader="${yellow}Server-Liste:${norm}"
-	local n=1 && lastListMsg=$(cat $tmpNet | column -s @ -t) && declare -g "magic_variable_$n=$(echo -e "$lastListMsg")"
+	if [[ -z $x ]];then
+		varList="> no server noted!"
+		lastListMsg="$varList"
+		declare -g "magic_variable_1=$(echo -e "$lastListMsg")"
+	else
+		lastListMsg=$(echo -e "$varList" | column -s @ -t)
+		declare -g "magic_variable_1=$(echo -e "$lastListMsg")"
+	fi
 }
 
 ServerWahl() {
