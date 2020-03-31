@@ -349,7 +349,7 @@ syncNetConf() {
 			if [[ -z $1 ]] || [[ $1 == $externMCServer ]];then
 				getSSHFunction checkConnection $externMCServer
 				if [[ $connected == true ]];then
-					varDBTDir=$(ssh -i $dbtKeyFile -p $stdSSHport root@$externMCServer ps -aux | grep "SCREEN -dmS ReboundLoop bash" | cut -f 3 -d '-' | cut -f 2 -d ' ' | sed s/reboundloop.sh//g)
+					readSyncData $externMCServer
 					getSSHFunction runExternScript $externMCServer dataFunctions.sh updateLocalConf			
 					varLocalConf="$varDBTDir"data/localconf
 					scp -q -i $dbtKeyFile -P $stdSSHport root@$externMCServer:$varLocalConf "$tempDir"localconf@$externMCServer
@@ -452,7 +452,7 @@ setNetConf() {
 readNetConf() {
 	if [[ -f $netConf ]];then 
 		stdBackupTime=$(grep std-backup-time= $netConf | cut -f2 -d: | sed "s/ //g")	# 00:00-23:59
-		syncTime=$(grep sync-time: $netConf | cut -f2 -d' ' | sed "s/ //g") # 00:00-23:59
+		syncTime=$(grep sync-time: $netConf | cut -f2 -d: | sed "s/ //g") # 00:00-23:59
 		syncEnabled=$(grep sync-enabled: $netConf | cut -f2 -d':' | sed "s/ //g") # 00:00-23:59
 	else
 		echo -e "std-backup-time:03:00\nsync-enabled: false\nsync-time:\nintern-mcServer:" > $netConf

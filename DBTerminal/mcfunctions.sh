@@ -121,6 +121,7 @@ installMC() {
 
 sendText() {
 	if ! [[ -z $text ]];then
+		if [[ -z $prefix ]];then prefix=Server;fi
 		varText='tellraw @a ["",{"text":"'$prefix'", "color":"gold","bold":true},{"text":": '$text'","color":"white"}]^M'
 		screen -S "MCS_$mcName" -p 0 -X stuff ''"$varText"'^M'
 	else

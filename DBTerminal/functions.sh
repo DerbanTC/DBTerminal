@@ -256,6 +256,8 @@ checkConditions() {
 		fi
 	elif ! [[ -f $mcSrvJar ]];then
 		StartIsEnabled=missingJar
+	elif ! [[ -f $bash ]];then
+		StartIsEnabled=missingStartShell
 	fi
 }
 

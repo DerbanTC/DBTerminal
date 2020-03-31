@@ -62,6 +62,11 @@ while true; do
 	lastSlash=$(( countSlashes +1 ))
 	for mcName in $(ls -d $mcDir*/ | cut -f$lastSlash -d'/');do
 		getFunction checkConditions
+		if [[ $StartIsEnabled == missingStartShell ]];then
+			echo -e "[INFO]: start.sh in [$mcName] not found... \n> copy start.sh from $copyDir..."
+			cp $copyDir$StartShellName $mcDir$mcName/ && chmod +x $startShell
+			getFunction checkConditions
+		fi
 		if [[ $StartIsEnabled == doStart ]];then
 			getMCFunction startMCScreen
 			getFunction getTime

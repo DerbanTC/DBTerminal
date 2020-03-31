@@ -83,7 +83,7 @@ doMCStart() {
 			lastMsg="${lgreen}[INFO/Start]: ${norm}-> Server ${lblue}[$mcName] ${norm}läuft bereits."
 		elif [[ $isRunning == false ]];then
 			waitUntilExternScreen "MCS_$mcName" &
-			runExternScript $physisIP mcfunctions.sh startMCScreen $mcName
+			runExternScript $physisIP mcfunctions.sh startMCScreen $mcName &
 			dataFunction updateVarNetData
 			lastMsg="${lgreen}[DONE/Start]: ${norm}-> Server ${lblue}[$mcName] ${norm}wird gestartet!"
 		else
@@ -446,34 +446,31 @@ listToBackupServer() {
 
 BackupCommands() {
 	setMCDailyBackup() {
-		(
-			setDailyBackup() {
-				if [[ $location == intern ]];then
-					echo -e "do [setMCBackupConf Backup $1]"
-					setMCBackupConf Backup $1
-					updateLocalToNetData
-				else
-					runExternScript functions.sh setMCBackupConf Backup $1 $mcName
-					updateVarNetData
-				fi
-			}
-			clear && readNetData $selectedMCSrv
-			if [[ $doBackup == true ]];then
-				askQuestion2 yes no "${yellow}[Terminal/backup]: -> Tägliche Backups für [$mcName] ${lred}deaktivieren${yellow}?" DailyBackup
-			elif [[ $doBackup == false ]];then
-				askQuestion2 yes no "${yellow}[Terminal/backup]: -> Tägliche Backups für [$mcName] ${lgreen}aktivieren${yellow}?" DailyBackup
-			elif [[ -z $doBackup ]];then
-				lastMsg="${lred}[ERROR/DailyBackup]: ${norm}-> Server [$mcName] wurde nie oder nicht korrekt gestartet!"
+		setDailyBackup() {
+			if [[ $location == intern ]];then
+				setMCBackupConf Backup $1
+				updateLocalToNetData
+			else
+				runExternScript $physisIP functions.sh setMCBackupConf Backup $1 $mcName
+				updateVarNetData
 			fi
-			
-			if [[ $askedAnswer == yes ]] && [[ $doBackup == true ]];then
-				setDailyBackup false
-				lastMsg="${lgreen}[DONE/backup]: ${norm}-> [backup] von [$mcName] wurde auf [$askedAnswer] gesetzt!"
-			elif [[ $askedAnswer == yes ]] && [[ $doBackup == false ]];then
-				setDailyBackup true
-				lastMsg="${lgreen}[DONE/backup]: ${norm}-> [backup] von [$mcName] wurde auf [$askedAnswer] gesetzt!"
-			fi && unset askedAnswer
-		)
+		}
+		clear && readNetData $selectedMCSrv
+		if [[ $doBackup == true ]];then
+			askQuestion2 yes no "${yellow}[Terminal/backup]: -> Tägliche Backups für [$mcName] ${lred}deaktivieren${yellow}?" DailyBackup
+		elif [[ $doBackup == false ]];then
+			askQuestion2 yes no "${yellow}[Terminal/backup]: -> Tägliche Backups für [$mcName] ${lgreen}aktivieren${yellow}?" DailyBackup
+		elif [[ -z $doBackup ]];then
+			lastMsg="${lred}[ERROR/DailyBackup]: ${norm}-> Server [$mcName] wurde nie oder nicht korrekt gestartet!"
+		fi
+		
+		if [[ $askedAnswer == yes ]] && [[ $doBackup == true ]];then
+			setDailyBackup false
+			lastMsg="${lgreen}[DONE/backup]: ${norm}-> [backup] von [$mcName] wurde auf [$askedAnswer] gesetzt!"
+		elif [[ $askedAnswer == yes ]] && [[ $doBackup == false ]];then
+			setDailyBackup true
+			lastMsg="${lgreen}[DONE/backup]: ${norm}-> [backup] von [$mcName] wurde auf [$askedAnswer] gesetzt!"
+		fi && unset askedAnswer
 	}
 	setMCBackupTime() {
 		readNetData $selectedMCSrv

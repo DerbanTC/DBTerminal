@@ -80,7 +80,7 @@ printHeader() {
 		local header="${yellow}***${green}DBT${yellow}***"
 	fi
 	getFunction getSTDFiles
-	if [[ -z $mcName ]];then local mcName="${lred}empty${lblue}";fi
+	if [[ -z "$mcName" ]];then local mcName="${lred}empty${lblue}";fi
 	echo -e "$(print3Colon "${yellow}[$(date +%R)]" "$header" "MC: ${lblue}[$mcName]$mcRunStateCode")${norm}"
 }
 
@@ -175,8 +175,7 @@ printNetConf() {
 	else
 		doExternBackup="$BackupServer"
 	fi
-	syncEnabled=$(grep "sync-enabled" $netConf | cut -f2 -d' ' | sed "s/ //g")
-	syncTime=$(grep "sync-time" $netConf | cut -f2 -d' ' | sed "s/ //g")
+	dataFunction readNetConf
 	local a="Backup-Server,Sync-Time,Synchro"
 	local b="$a\n$doExternBackup,$(chColor $syncTime),$(chColor $syncEnabled)"
 	lastListMsg="$(echo -e "$b" | column -s , -t)" && declare -g "magic_variable_2=$(echo -e "$lastListMsg")"
