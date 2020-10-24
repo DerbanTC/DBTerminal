@@ -7,7 +7,7 @@ gitUrl=https://raw.githubusercontent.com/DerbanTC/DBTerminal/master/DBTerminal/
 # Install packages
 doInstallPackages() {
 	apt-get update
-	installPackages=ca-certificates,locales-all,curl,screen,tmux,htop,git,jq,bc,fail2ban,ufw,default-jdk
+	installPackages=ca-certificates,locales-all,curl,screen,tmux,htop,git,jq,bc,fail2ban,ufw,opendjk-8-jre
 	IFS=, read -a listPackages <<< "$installPackages"
 	for varPackage in "${listPackages[@]}";do 
 		isInstalled=$(dpkg-query -W -f='${Status}' $varPackage 2>/dev/null | grep -c "ok installed")
